@@ -27,13 +27,13 @@ def nutrion_ix_instant(query):
     api_key = "6c916bc5ed757f9ca2227a0213bb5abd"
 
     headers = {
-        "x-app-id": app_id
-        "x-app-key": api_key
+        "x-app-id": app_id,
+        "x-app-key": api_key,
         "content-type": "application/json"
     }
 
     params = {
-        "query" = query
+        "query": query
     }
 
     end_pt_url = "https://trackapi.nutritionix.com/v2/search/instant"
