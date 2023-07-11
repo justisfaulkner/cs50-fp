@@ -1,7 +1,7 @@
-from flask import session
+from flask import redirect, session
 from functools import wraps
 
-    
+
 def main():
     ...
 
