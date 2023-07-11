@@ -8,6 +8,8 @@ from flask import (
     flash,
 )
 from flask_session import Session
+import json
+import requests
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from project import login_required
