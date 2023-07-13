@@ -1,6 +1,7 @@
 from cs50 import SQL
 from flask import (
     Flask,
+    jsonify,
     request,
     redirect,
     render_template,
@@ -12,7 +13,7 @@ import json
 import requests
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from project import login_required
+from project import login_required, nutrion_ix_instant
 
 # figure out how I can wrap this with a main function or have a main function for other functions
 app = Flask(__name__)
@@ -29,10 +30,18 @@ app.secret_key = "testing"
 db = SQL("sqlite:///database.db")
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    return render_template("index.html")
+    if request.method == "POST":
+        query = request.form.get("food-search")
+        # if query and len(query) >=3:
+        results = nutrion_ix_instant(query)
+        return jsonify(results)
+        # else:
+        #     return render_template("apology.html")
+    else:
+        return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -122,7 +131,7 @@ def register():
                 generate_password_hash(request.form.get("password")),
             )
             return redirect("/")
-
+    
 
 # final return to let the app run
 # if wrapped inside main function
