@@ -2,20 +2,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('food-search');
     const resultsList = document.getElementById('results');
 
+    let timerId;
+
     searchInput.addEventListener('input', () => {
-        const query = searchInput.value;
-        if (query.length >= 3) {
-            fetch('/', {
-                method: 'POST',
-                body: new URLSearchParams({ 'food-search': query })
-            })
-            .then(response => response.json())
-            .then(results => {
-                displayResults(results);
-            });
-        } else {
-            clearResults();
-        }
+        clearTimeout(timerId)
+        timerId = setTimeout(() => {
+            const query = searchInput.value;
+            if (query.length >= 3) {
+                fetch('/', {
+                    method: 'POST',
+                    body: new URLSearchParams({ 'food-search': query })
+                })
+                .then(response => response.json())
+                .then(results => {
+                    displayResults(results);
+                });
+            } else {
+                clearResults();
+            }
+        }, 300);
     });
 
     function displayResults(results) {
