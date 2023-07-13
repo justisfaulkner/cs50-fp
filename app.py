@@ -34,13 +34,16 @@ db = SQL("sqlite:///database.db")
 @login_required
 def index():
     if request.method == "POST":
+        # current issue is that query is returning None from food-search
         query = request.form.get("food-search")
-        # if query and len(query) >=3:
-        results = nutrion_ix_instant(query)
-        return jsonify(results)
-        # else:
-        #     return render_template("apology.html")
+        print(query)
+        if query and len(query) >=3:
+            results = nutrion_ix_instant(query)
+            return jsonify(results)
+        else:
+            return jsonify([])
     else:
+        print("GET")
         return render_template("index.html")
 
 
@@ -131,7 +134,7 @@ def register():
                 generate_password_hash(request.form.get("password")),
             )
             return redirect("/")
-    
+
 
 # final return to let the app run
 # if wrapped inside main function

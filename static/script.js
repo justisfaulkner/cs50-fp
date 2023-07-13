@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (query.length >= 3) {
             fetch('/', {
                 method: 'POST',
-                body: new URLSearchParams({ query })
+                body: new URLSearchParams({ 'food-search': query })
             })
             .then(response => response.json())
             .then(results => {
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function displayResults(results) {
-        console.log('Displaying results:', results);
+        // console.log('Displaying results:', results);
         clearResults();
         results.forEach(result => {
             const li = document.createElement('li');

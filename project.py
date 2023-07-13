@@ -3,12 +3,12 @@ from functools import wraps
 import json
 import requests
 
+
 def main():
     ...
 
 
 def login_required(f):
-    
     # Decorate routes to require login.
 
     @wraps(f)
@@ -33,21 +33,19 @@ def nutrion_ix_instant(query):
     }
 
     # set parmeters for the query, right now query is all I have, but can filter and sort if needed I think
-    params = {
-        "query": query
-    }
+    params = {"query": query}
 
     # set the end point for search/instant
     end_pt_url = "https://trackapi.nutritionix.com/v2/search/instant"
 
-    #check chatgpt and finance prob set lookup function for how to make the actual request
+    # check chatgpt and finance prob set lookup function for how to make the actual request
     response = requests.get(end_pt_url, params=params, headers=headers)
     data = response.json()
 
     # grab the relevent information
     results = []
-    for hit in data["common"]:
-        food_name = hit["food_name"]
+    for hit in data["branded"]:
+        food_name = hit["brand_name_item_name"]
         results.append(food_name)
 
     return results
