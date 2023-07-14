@@ -24,11 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function displayResults(results) {
-        // console.log('Displaying results:', results);
         clearResults();
         results.forEach(result => {
             const li = document.createElement('li');
-            li.textContent = result;
+            const resultText = Object.values(result);
+            li.textContent = resultText;
             resultsList.appendChild(li);
         });
     }

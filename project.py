@@ -1,4 +1,4 @@
-from flask import redirect, session
+from flask import redirect, request, session
 from functools import wraps
 import json
 import requests
@@ -44,9 +44,17 @@ def nutrion_ix_instant(query):
 
     # grab the relevent information
     results = []
-    for hit in data["branded"]:
-        food_name = hit["brand_name_item_name"]
-        results.append(food_name)
+    for hit in data:
+        if hit == "common":
+            for item in data["common"]:
+                food_name = item["food_name"]
+                # test = "common test"
+                results.append({"common": food_name})
+        elif hit == "branded":
+            for item in data["branded"]:
+                food_name = item["brand_name_item_name"]
+                # test = "brand test"
+                results.append({"branded": food_name})
 
     return results
 

@@ -37,6 +37,7 @@ def index():
         query = request.form.get("food-search")
         if query and len(query) >=3:
             results = nutrion_ix_instant(query)
+            print(jsonify(results))
             return jsonify(results)
         else:
             return jsonify([])
