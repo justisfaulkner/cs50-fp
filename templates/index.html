@@ -10,11 +10,15 @@
     <form method="post" action="/">
         <input autocomplete="off" type="text" id="food-search" name="food-search" placeholder="Search for a food">
     </form>
-    <div id="tabs">
-        <button name="common">Common</button>
-        <button name="branded">Branded</button>
+    <div>
+        <button class="tabs" data-type="all">All</button>
+        <button class="tabs" data-type="common">Common</button>
+        <button class="tabs" data-type="branded">Branded</button>
     </div>
-    <ul id="results"></ul>
+    <ul id="results">
+        <li data-type="common">common</li>
+        <li data-type="branded">branded</li>
+    </ul>
 
 
 {% endblock %}

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('food-search');
     const resultsList = document.getElementById('results');
+    const filterButtons = document.querySelectorAll('.tabs');
 
     let timerId;
 
@@ -27,8 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
         clearResults();
         results.forEach(result => {
             const li = document.createElement('li');
-            const resultText = Object.values(result);
+            const resultText = Object.values(result)[0];
             li.textContent = resultText;
+            if (Object.keys(result)[0] == 'common') {
+                li.setAttribute('data-type', 'common')                
+            }
+            else {
+                li.setAttribute('data-type', 'branded')
+            }
             resultsList.appendChild(li);
         });
     }
@@ -36,4 +43,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function clearResults() {
         resultsList.innerHTML = '';
     }
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const category = button.dataset.type;
+          filter(category);
+        });
+    })
+
+    function filter(category) {     
+        const displayedItems = Array.from(resultsList.querySelectorAll('li'));  
+        
+        displayedItems.forEach(item => {
+            if (category === 'all') {
+              item.style.display = 'block';
+            } else if (item.dataset.type === category) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+    }
+
 });
