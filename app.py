@@ -13,7 +13,7 @@ import json
 import requests
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from project import login_required, search_food, add_common_food
+from project import login_required, search_food, add_common_food, add_branded_food
 
 # figure out how I can wrap this with a main function or have a main function for other functions
 app = Flask(__name__)
@@ -47,12 +47,21 @@ def index():
 @login_required
 def add():
     if request.method == "POST":
-        query = request.form.get("add-common-food")
-        if query:
-            results = add_common_food(query)
-            return jsonify(results)
-        else:
-            return jsonify([])
+        query = request.form.get("add-food")
+        type = request.headers.get("type")
+        if type == "common":
+            if query:
+                results = add_common_food(query)
+                return jsonify(results)
+            else:
+                return jsonify([])
+        # need to complete branded section
+        elif type == "branded":
+            if query:
+                results = add_branded_food(query)
+                return jsonify(results)
+            else:
+                return jsonify([])
     else:
         return render_template("add.html")
 

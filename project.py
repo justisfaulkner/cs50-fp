@@ -88,7 +88,7 @@ def add_common_food(query):
 
     results = {
     key: hit[key]
-    if key != "photo" else hit["photo"]["highres"]
+    if key != "photo" else hit["photo"]["thumb"]
     for hit in data["foods"]
     for key in [
         "food_name",
@@ -117,7 +117,35 @@ def add_branded_food(query):
     }
 
     # set parmeters for the query, right now query is all I have, but can filter and sort if needed I think
-    params = {"query": query}
+    params = {"nix_item_id": query}
+
+    # set the end point for search/instant
+    end_pt_url = "https://trackapi.nutritionix.com/v2/search/item"    
+
+    response = requests.get(end_pt_url, params=params, headers=headers)
+    data = response.json()
+
+    results = {
+    key: hit[key]
+    if key != "photo" else hit["photo"]["thumb"]
+    for hit in data["foods"]
+    for key in [
+        "food_name",
+        "serving_qty",
+        "serving_unit",
+        "serving_weight_grams",
+        "nf_calories",
+        "nf_total_fat",
+        "nf_saturated_fat",
+        "nf_sodium",
+        "nf_total_carbohydrate",
+        "nf_dietary_fiber",
+        "nf_sugars",
+        "nf_protein",
+        "photo"
+    ]
+    }
+    return results
 
 
 if __name__ == "__main__":

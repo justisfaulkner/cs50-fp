@@ -80,15 +80,30 @@ document.addEventListener('DOMContentLoaded', () => {
         nutrientButtons.forEach(button => {
           button.addEventListener('click', () => {
             const query = button.value;
-            // need to run the fetch function to POST an API request
-            fetch('/add', {
-                method: 'POST',
-                body: new URLSearchParams({ 'add-common-food': query })
-            })
-            .then(response => response.json())
-            .then(results => {
-                switchWindow("/add?results=" + encodeURIComponent(JSON.stringify(results)));
-            });
+            const type = button.getAttribute("data-type")
+            console.log(type)
+            if (type === 'common') {
+                fetch('/add', {
+                    method: 'POST',
+                    body: new URLSearchParams({ 'add-food': query }),
+                    headers: {'type': 'common'}
+                })
+                .then(response => response.json())
+                .then(results => {
+                    switchWindow("/add?results=" + encodeURIComponent(JSON.stringify(results)));
+                });
+            }
+            else if (type === 'branded') {
+                fetch('/add', {
+                    method: 'POST',
+                    body: new URLSearchParams({ 'add-food': query }),
+                    headers: {'type': 'branded'}
+                })
+                .then(response => response.json())
+                .then(results => {
+                    switchWindow("/add?results=" + encodeURIComponent(JSON.stringify(results)));
+                });
+            }
           })
         });
     }
@@ -102,10 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const resultsString = urlParams.get('results');
         const results = JSON.parse(resultsString);
-        displayCommon(results, common);
+        displayFood(results, common);
     }
     
-    function displayCommon(results, common) {
+    function displayFood(results, common) {
         // console.log(results);
         Object.entries(results).forEach(([key, value]) => {
           const p = document.createElement('p');
