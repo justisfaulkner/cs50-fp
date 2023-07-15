@@ -6,7 +6,7 @@
 
 {% block main %}
 
-    <h1>Food Search</h1>
+    <h1>JTrack Food Search</h1>
     <form method="post" action="/">
         <input autocomplete="off" type="text" id="food-search" name="food-search" placeholder="Search for a food">
     </form>
@@ -15,10 +15,7 @@
         <button class="tabs" data-type="common">Common</button>
         <button class="tabs" data-type="branded">Branded</button>
     </div>
-    <ul id="results">
-        <li data-type="common">common</li>
-        <li data-type="branded">branded</li>
-    </ul>
+    <ul id="results"></ul>
 
 
 {% endblock %}

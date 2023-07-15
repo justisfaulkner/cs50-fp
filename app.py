@@ -13,7 +13,7 @@ import json
 import requests
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from project import login_required, nutrion_ix_instant
+from project import login_required, search_food, add_common_food
 
 # figure out how I can wrap this with a main function or have a main function for other functions
 app = Flask(__name__)
@@ -36,12 +36,25 @@ def index():
     if request.method == "POST":
         query = request.form.get("food-search")
         if query and len(query) >= 3:
-            results = nutrion_ix_instant(query)
+            results = search_food(query)
             return jsonify(results)
         else:
             return jsonify([])
     else:
         return render_template("index.html")
+    
+@app.route("/add", methods=["GET", "POST"])
+@login_required
+def add():
+    if request.method == "POST":
+        query = request.form.get("add-common-food")
+        if query:
+            results = add_common_food(query)
+            return jsonify(results)
+        else:
+            return jsonify([])
+    else:
+        return render_template("add.html")
 
 
 @app.route("/login", methods=["GET", "POST"])

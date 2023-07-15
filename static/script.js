@@ -1,42 +1,52 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const currentPath = window.location.pathname;
+    const currentURL = window.location.href
     const searchInput = document.getElementById('food-search');
     const resultsList = document.getElementById('results');
     const filterButtons = document.querySelectorAll('.tabs');
+    // const nutrientButtons = Array.from(resultsList.querySelectorAll('button'));
 
     let timerId;
 
-    searchInput.addEventListener('input', () => {
-        clearTimeout(timerId)
-        timerId = setTimeout(() => {
-            const query = searchInput.value;
-            if (query.length >= 3) {
-                fetch('/', {
-                    method: 'POST',
-                    body: new URLSearchParams({ 'food-search': query })
-                })
-                .then(response => response.json())
-                .then(results => {
-                    displayResults(results);
-                });
-            } else {
-                clearResults();
-            }
-        }, 300);
-    });
+    if (currentPath === '/index.html' || currentPath === '/') {
+        searchInput.addEventListener('input', () => {
+            clearTimeout(timerId)
+            timerId = setTimeout(() => {
+                const query = searchInput.value;
+                if (query.length >= 3) {
+                    fetch('/', {
+                        method: 'POST',
+                        body: new URLSearchParams({ 'food-search': query })
+                    })
+                    .then(response => response.json())
+                    .then(results => {
+                        displaySearch(results);
+                        addFood();
+                    });
+                } else {
+                    clearResults();
+                }
+            }, 300);
+        });
+    }
 
-    function displayResults(results) {
+    function displaySearch(results) {
         clearResults();
         results.forEach(result => {
-            const li = document.createElement('li');
+            // maybe I can make a list item that has a button inside of it, along with image kcals, etc. 
+            // right now its just a button
+            const button = document.createElement('button');
             const resultText = Object.values(result)[0];
-            li.textContent = resultText;
+            button.textContent = resultText;
             if (Object.keys(result)[0] == 'common') {
-                li.setAttribute('data-type', 'common')                
+                button.setAttribute('data-type', 'common')
+                button.setAttribute('value', Object.values(result)[1])                
             }
             else {
-                li.setAttribute('data-type', 'branded')
+                button.setAttribute('data-type', 'branded')
+                button.setAttribute('value', Object.values(result)[1]) 
             }
-            resultsList.appendChild(li);
+            resultsList.appendChild(button);
         });
     }
     
@@ -52,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     function filter(category) {     
-        const displayedItems = Array.from(resultsList.querySelectorAll('li'));  
+        const displayedItems = Array.from(resultsList.querySelectorAll('button'));  
         
         displayedItems.forEach(item => {
             if (category === 'all') {
@@ -64,5 +74,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           });
     }
+
+    function addFood() {
+        const nutrientButtons = Array.from(resultsList.querySelectorAll('button'));
+        nutrientButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const query = button.value;
+            // need to run the fetch function to POST an API request
+            fetch('/add', {
+                method: 'POST',
+                body: new URLSearchParams({ 'add-common-food': query })
+            })
+            .then(response => response.json())
+            .then(results => {
+                switchWindow("/add?results=" + encodeURIComponent(JSON.stringify(results)));
+            });
+          })
+        });
+    }
+      
+    function switchWindow(page) {
+        window.location.assign(page);
+    }
+
+    if (currentURL.includes("/add?results=")) {
+        const common = document.getElementById("common");
+        const urlParams = new URLSearchParams(window.location.search);
+        const resultsString = urlParams.get('results');
+        const results = JSON.parse(resultsString);
+        displayCommon(results, common);
+    }
+    
+    function displayCommon(results, common) {
+        // console.log(results);
+        Object.entries(results).forEach(([key, value]) => {
+          const p = document.createElement('p');
+          p.textContent = `${key}: ${value}`;
+        //   console.log(p);
+          common.appendChild(p);
+        });
+    }
+
 
 });
