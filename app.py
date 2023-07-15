@@ -14,11 +14,13 @@ import requests
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from project import login_required, search_food, add_common_food, add_branded_food
+from secret import generate_secret_key
 
 # figure out how I can wrap this with a main function or have a main function for other functions
 app = Flask(__name__)
 # figure out what a secret key means and why I need it to be able to use the flash messages
-app.secret_key = "testing"
+key = generate_secret_key(32)
+app.secret_key = key
 
 # figure out what this jargon means and why I can't need a secret key instead of using this.
 # why was this used in the finance prob set?
@@ -47,15 +49,19 @@ def index():
 @login_required
 def add():
     if request.method == "POST":
+        # retrieve the query to be passed to the API function
         query = request.form.get("add-food")
+        # retrieve the type (common/branded) to determine running add_common_food or add_branded_food function
         type = request.headers.get("type")
         if type == "common":
+            # if query is not empty
             if query:
+                # pass the query to the API function and save results in memory to results var
                 results = add_common_food(query)
+                # return a flask.Response object that is of type JSON
                 return jsonify(results)
             else:
                 return jsonify([])
-        # need to complete branded section
         elif type == "branded":
             if query:
                 results = add_branded_food(query)
@@ -77,7 +83,6 @@ def login():
     if request.method == "POST":
         # Ensure username was submitted
         if not request.form.get("username"):
-            # return apology("must provide username", 403)
             flash("Must Provide a Username", "error")
             return render_template("login.html")
 

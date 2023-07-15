@@ -11,7 +11,8 @@ api_key = "6c916bc5ed757f9ca2227a0213bb5abd"
 def main():
     print(
         "I am submitting this project for CS50x & CS50P using Flask within Python3"
-        "to create a Web App that helps users track their calories"
+        " to create a Web App that helps users track their calories."
+        " See app.py for Flask Web App."
     )
 
 

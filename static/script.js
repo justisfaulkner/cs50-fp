@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('food-search');
     const resultsList = document.getElementById('results');
     const filterButtons = document.querySelectorAll('.tabs');
-    // const nutrientButtons = Array.from(resultsList.querySelectorAll('button'));
 
     let timerId;
 
@@ -81,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
           button.addEventListener('click', () => {
             const query = button.value;
             const type = button.getAttribute("data-type")
-            console.log(type)
             if (type === 'common') {
                 fetch('/add', {
                     method: 'POST',
@@ -121,14 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function displayFood(results, common) {
-        // console.log(results);
         Object.entries(results).forEach(([key, value]) => {
           const p = document.createElement('p');
           p.textContent = `${key}: ${value}`;
-        //   console.log(p);
           common.appendChild(p);
         });
     }
-
 
 });
