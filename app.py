@@ -1,6 +1,7 @@
 from cs50 import SQL
 from flask import (
     Flask,
+    jsonify,
     request,
     redirect,
     render_template,
@@ -8,9 +9,11 @@ from flask import (
     flash,
 )
 from flask_session import Session
+import json
+import requests
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from project import login_required
+from project import login_required, search_food, add_common_food, add_branded_food
 
 # figure out how I can wrap this with a main function or have a main function for other functions
 app = Flask(__name__)
@@ -27,10 +30,40 @@ app.secret_key = "testing"
 db = SQL("sqlite:///database.db")
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    return render_template("index.html")
+    if request.method == "POST":
+        query = request.form.get("food-search")
+        if query and len(query) >= 3:
+            results = search_food(query)
+            return jsonify(results)
+        else:
+            return jsonify([])
+    else:
+        return render_template("index.html")
+    
+@app.route("/add", methods=["GET", "POST"])
+@login_required
+def add():
+    if request.method == "POST":
+        query = request.form.get("add-food")
+        type = request.headers.get("type")
+        if type == "common":
+            if query:
+                results = add_common_food(query)
+                return jsonify(results)
+            else:
+                return jsonify([])
+        # need to complete branded section
+        elif type == "branded":
+            if query:
+                results = add_branded_food(query)
+                return jsonify(results)
+            else:
+                return jsonify([])
+    else:
+        return render_template("add.html")
 
 
 @app.route("/login", methods=["GET", "POST"])

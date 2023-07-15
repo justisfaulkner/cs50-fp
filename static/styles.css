@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#food-search {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.tabs {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .tabs:active,
+  .tabs:focus {
+    background-color: #2980b9;
+  }
+  
+
+#results {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#results button {
+    padding: 5px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    display: block;
+    width: 100%;
+}

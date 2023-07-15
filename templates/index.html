@@ -6,26 +6,16 @@
 
 {% block main %}
 
-    <div class="container text-center">
-        <div class="row">
-        <div class="col">
-            1 of 2
-        </div>
-        <div class="col">
-            2 of 2
-        </div>
-        </div>
-        <div class="row">
-        <div class="col">
-            1 of 3
-        </div>
-        <div class="col">
-            2 of 3
-        </div>
-        <div class="col">
-            3 of 3
-        </div>
-        </div>
+    <h1>JTrack Food Search</h1>
+    <form method="post" action="/">
+        <input autocomplete="off" type="text" id="food-search" name="food-search" placeholder="Search for a food">
+    </form>
+    <div>
+        <button class="tabs" data-type="all">All</button>
+        <button class="tabs" data-type="common">Common</button>
+        <button class="tabs" data-type="branded">Branded</button>
     </div>
+    <ul id="results"></ul>
+
 
 {% endblock %}
