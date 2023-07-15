@@ -126,4 +126,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    $('#test5').nutritionLabel({
+        showServingUnitQuantity : false,
+        showAmountPerServing : false,
+        showCalorieDiet : true,
+        ingredientList : 'Balsamic Vinaigrette, BBQ Hickory, Steak Tips',
+        itemName : 'Fire Grilled Sirloin Tips',
+    
+        showPolyFat : false,
+        showMonoFat : false,
+        showTransFat : false,
+        showVitaminD : false,
+        showPotassium_2018 : false,
+        showCalcium : false,
+        showIron : false,
+        showFatCalories : false,
+        showCaffeine : false,
+    
+        valueCalories : 410,
+        valueTotalFat : 15,
+        valueSatFat : 4.5,
+        valueCholesterol : 105,
+        valueSodium : 1220,
+        valueTotalCarb : 20,
+        valueFibers : 0,
+        valueSugars : 18,
+        valueProteins : 48,
+        valueVitaminD : 12.22,
+        valuePotassium_2018 : 4.22,
+        valueCalcium : 7.22,
+        valueIron : 11.22,
+        valueAddedSugars : 17,
+        showLegacyVersion : false
+    });   
+      
 });

@@ -43,3 +43,7 @@ h1 {
     display: block;
     width: 100%;
 }
+
+.label {
+    text-align: left;
+}
