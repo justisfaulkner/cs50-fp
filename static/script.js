@@ -116,6 +116,41 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultsString = urlParams.get('results');
         const results = JSON.parse(resultsString);
         displayFood(results, common);
+
+        $('#test5').nutritionLabel({
+            showServingUnitQuantity : false,
+            showAmountPerServing : false,
+            showCalorieDiet : true,
+            // ingredientList : 'Balsamic Vinaigrette, BBQ Hickory, Steak Tips',
+            itemName : results.food_name,
+        
+            showPolyFat : false,
+            showMonoFat : false,
+            showTransFat : false,
+            showVitaminD : false,
+            showPotassium_2018 : false,
+            showCalcium : false,
+            showIron : false,
+            showFatCalories : false,
+            showCaffeine : false,
+        
+            valueCalories : results.nf_calories,
+            valueTotalFat : results.nf_total_fat,
+            valueSatFat : results.nf_saturated_fat,
+            valueCholesterol : results.nf_cholesterol,
+            valueSodium : results.nf_sodium,
+            valueTotalCarb : results.nf_total_carbohydrate,
+            valueFibers : results.nf_dietary_fiber,
+            valueSugars : results.nf_sugars,
+            valueProteins : results.nf_protein,
+            valueVitaminD : 12345,
+            valuePotassium_2018 : 123,
+            valueCalcium : 12345,
+            valueIron : 12345,
+            valueAddedSugars : 12345,
+            showLegacyVersion : false
+        });   
+        
     }
     
     function displayFood(results, common) {
@@ -126,38 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    $('#test5').nutritionLabel({
-        showServingUnitQuantity : false,
-        showAmountPerServing : false,
-        showCalorieDiet : true,
-        ingredientList : 'Balsamic Vinaigrette, BBQ Hickory, Steak Tips',
-        itemName : 'Fire Grilled Sirloin Tips',
-    
-        showPolyFat : false,
-        showMonoFat : false,
-        showTransFat : false,
-        showVitaminD : false,
-        showPotassium_2018 : false,
-        showCalcium : false,
-        showIron : false,
-        showFatCalories : false,
-        showCaffeine : false,
-    
-        valueCalories : 410,
-        valueTotalFat : 15,
-        valueSatFat : 4.5,
-        valueCholesterol : 105,
-        valueSodium : 1220,
-        valueTotalCarb : 20,
-        valueFibers : 0,
-        valueSugars : 18,
-        valueProteins : 48,
-        valueVitaminD : 12.22,
-        valuePotassium_2018 : 4.22,
-        valueCalcium : 7.22,
-        valueIron : 11.22,
-        valueAddedSugars : 17,
-        showLegacyVersion : false
-    });   
+
       
 });
