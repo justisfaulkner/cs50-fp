@@ -115,13 +115,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const resultsString = urlParams.get('results');
         const results = JSON.parse(resultsString);
-        displayFood(results, common);
+        // displayFood(results, common);
 
-        $('#test5').nutritionLabel({
+        var options = {
             showServingUnitQuantity : false,
             showAmountPerServing : false,
             showCalorieDiet : true,
-            // ingredientList : 'Balsamic Vinaigrette, BBQ Hickory, Steak Tips',
+            showIngredients : false,
             itemName : results.food_name,
         
             showPolyFat : false,
@@ -143,13 +143,20 @@ document.addEventListener('DOMContentLoaded', () => {
             valueFibers : results.nf_dietary_fiber,
             valueSugars : results.nf_sugars,
             valueProteins : results.nf_protein,
-            valueVitaminD : 12345,
-            valuePotassium_2018 : 123,
-            valueCalcium : 12345,
-            valueIron : 12345,
-            valueAddedSugars : 12345,
+            valueVitaminD : "no functionality",
+            valuePotassium_2018 : "no functionality",
+            valueCalcium : "no functionality",
+            valueIron : "no functionality",
             showLegacyVersion : false
-        });   
+        }
+
+        if (typeof results.nf_added_sugars === 'undefined') {
+            options.naAddedSugars = true;
+        } else {
+            options.valueAddedSugars = results.nf_added_sugars;
+        }
+
+        $('#nutritionLabel').nutritionLabel(options);
         
     }
     

@@ -104,10 +104,25 @@ def add_common_food(query):
         "nf_total_carbohydrate",
         "nf_dietary_fiber",
         "nf_sugars",
+        "full_nutrients",
         "nf_protein",
         "photo"
     ]
     }
+
+    # if food has added_sugars nutrient information, retrieve it and add it to the results dict
+    for nutrient in results["full_nutrients"]:
+        if nutrient["attr_id"] == 539:
+            results["nf_added_sugars"] = nutrient["value"]
+            del results["full_nutrients"]
+            break
+    
+    # either way, delete the full nutrients key
+    try:
+        if results["full_nutrients"]:
+            del results["full_nutrients"]
+    except:
+        KeyError()
 
     return results
 
@@ -144,10 +159,26 @@ def add_branded_food(query):
         "nf_total_carbohydrate",
         "nf_dietary_fiber",
         "nf_sugars",
+        "full_nutrients",
         "nf_protein",
         "photo"
     ]
     }
+
+    # if food has added_sugars nutrient information, retrieve it and add it to the results dict
+    for nutrient in results["full_nutrients"]:
+        if nutrient["attr_id"] == 539:
+            results["nf_added_sugars"] = nutrient["value"]
+            del results["full_nutrients"]
+            break
+    
+    # either way, delete the full nutrients key
+    try:
+        if results["full_nutrients"]:
+            del results["full_nutrients"]
+    except:
+        KeyError()
+    
     return results
 
 
