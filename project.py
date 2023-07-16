@@ -87,44 +87,8 @@ def add_common_food(query):
     response = requests.post(end_pt_url, data=body, headers=headers)
     data = response.json()
 
-    results = {
-    key: hit[key]
-    if key != "photo" else hit["photo"]["thumb"]
-    for hit in data["foods"]
-    for key in [
-        "food_name",
-        "serving_qty",
-        "serving_unit",
-        "serving_weight_grams",
-        "nf_calories",
-        "nf_total_fat",
-        "nf_saturated_fat",
-        "nf_cholesterol",
-        "nf_sodium",
-        "nf_total_carbohydrate",
-        "nf_dietary_fiber",
-        "nf_sugars",
-        "full_nutrients",
-        "nf_protein",
-        "photo"
-    ]
-    }
+    return add_food_results(data)
 
-    # if food has added_sugars nutrient information, retrieve it and add it to the results dict
-    for nutrient in results["full_nutrients"]:
-        if nutrient["attr_id"] == 539:
-            results["nf_added_sugars"] = nutrient["value"]
-            del results["full_nutrients"]
-            break
-    
-    # either way, delete the full nutrients key
-    try:
-        if results["full_nutrients"]:
-            del results["full_nutrients"]
-    except:
-        KeyError()
-
-    return results
 
 def add_branded_food(query):
      # set /search/item endpoint specefic headers
@@ -141,6 +105,11 @@ def add_branded_food(query):
 
     response = requests.get(end_pt_url, params=params, headers=headers)
     data = response.json()
+    
+    return add_food_results(data)
+
+
+def add_food_results(data):
 
     results = {
     key: hit[key]
