@@ -6,29 +6,10 @@ body {
 h1 {
     text-align: center;
 }
-
-#food-search {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
+  
+.filter-buttons {
+    padding-bottom: 10px;
 }
-
-.tabs {
-    background-color: #3498db;
-    color: white;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .tabs:active,
-  .tabs:focus {
-    background-color: #2980b9;
-  }
-  
 
 #results {
     list-style-type: none;
@@ -39,9 +20,14 @@ h1 {
 #results button {
     padding: 5px;
     background-color: #f2f2f2;
-    border: 1px solid #ccc;
+    border: 1px solid white;
+    border-radius: 4px;
     display: block;
     width: 100%;
+}
+
+#results button:hover{
+    background-color: #e8e8e8;
 }
 
 .label-container {
@@ -51,4 +37,5 @@ h1 {
 
 .label {
     text-align: left;
+    padding: 10px;
 }

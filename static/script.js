@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentURL = window.location.href
     const searchInput = document.getElementById('food-search');
     const resultsList = document.getElementById('results');
-    const filterButtons = document.querySelectorAll('.tabs');
+    const filterButtons = document.querySelectorAll('#filter');
 
     let timerId;
 
