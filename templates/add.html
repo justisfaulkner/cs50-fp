@@ -6,15 +6,54 @@
 
 {% block main %}
     
-    <h1> Food Name Here</h1>
-    <div>Brand Name Here</div>
+    <!-- have to use id names here then set the text, src, etc. in JS -->
+    <img id="photo">
+    <h3 id="food_name"></h3>
+    <div id="brand_name"></div>
+
+    <p id="alt_measures"></p>
 
     <div class="label-container">
         <div class="label" id="nutritionLabel"></div>
     </div> 
 
-    <button class="btn btn-primary" id="add-food">Add Food</button>
+    <h5>Macros:</h5>
 
-    <div id="common"></div>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Add Food
+    </button>
+  
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">JTrack & Logo</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <h3 id="food_name"></h3>
+                <div id="brand_name"></div>
+                
+                <hr>
+
+                <div class="label" id="nutritionLabel2"></div>
+
+                <hr>
+                
+                <button class="btn btn-outline-primary btn-sm">Breakfast</button>
+                <button class="btn btn-outline-primary btn-sm">Lunch</button>
+                <button class="btn btn-outline-primary btn-sm">Dinner</button>
+                <button class="btn btn-outline-primary btn-sm">Snack</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Add Food</button>
+            </div>
+        </div>
+        </div>
+    </div>
 
 {% endblock %}

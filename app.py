@@ -48,6 +48,7 @@ def index():
 @app.route("/add", methods=["GET", "POST"])
 @login_required
 def add():
+    results = {}
     if request.method == "POST":
         # retrieve the query to be passed to the API function
         query = request.form.get("add-food")
@@ -69,7 +70,7 @@ def add():
             else:
                 return jsonify([])
     else:
-        return render_template("add.html")
+        return render_template("add.html", results=results)
 
 
 @app.route("/login", methods=["GET", "POST"])

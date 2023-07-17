@@ -117,6 +117,7 @@ def add_food_results(data):
     for hit in data["foods"]
     for key in [
         "food_name",
+        "brand_name",
         "serving_qty",
         "serving_unit",
         "serving_weight_grams",
@@ -130,7 +131,8 @@ def add_food_results(data):
         "nf_sugars",
         "full_nutrients",
         "nf_protein",
-        "photo"
+        "photo",
+        "alt_measures",
     ]
     }
 

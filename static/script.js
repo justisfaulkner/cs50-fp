@@ -80,28 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
           button.addEventListener('click', () => {
             const query = button.value;
             const type = button.getAttribute("data-type")
-            if (type === 'common') {
-                fetch('/add', {
-                    method: 'POST',
-                    body: new URLSearchParams({ 'add-food': query }),
-                    headers: {'type': 'common'}
-                })
-                .then(response => response.json())
-                .then(results => {
-                    switchWindow("/add?results=" + encodeURIComponent(JSON.stringify(results)));
-                });
-            }
-            else if (type === 'branded') {
-                fetch('/add', {
-                    method: 'POST',
-                    body: new URLSearchParams({ 'add-food': query }),
-                    headers: {'type': 'branded'}
-                })
-                .then(response => response.json())
-                .then(results => {
-                    switchWindow("/add?results=" + encodeURIComponent(JSON.stringify(results)));
-                });
-            }
+            fetch('/add', {
+                method: 'POST',
+                body: new URLSearchParams({ 'add-food': query }),
+                headers: {'type': type}
+            })
+            .then(response => response.json())
+            .then(results => {
+                switchWindow("/add?results=" + encodeURIComponent(JSON.stringify(results)));
+            });
           })
         });
     }
@@ -111,18 +98,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (currentURL.includes("/add?results=")) {
-        const common = document.getElementById("common");
         const urlParams = new URLSearchParams(window.location.search);
         const resultsString = urlParams.get('results');
         const results = JSON.parse(resultsString);
-        // displayFood(results, common);
+
+        console.log(results)
+
+        const keys = Object.keys(results);
+        keys.forEach(key => {
+            if (key === 'photo') {
+                const ids = document.querySelectorAll('#' + key);
+                for (let i = 0; i < ids.length; i++) {
+                    ids[i].src = results[key];
+                }
+            }    
+            else if (key === 'alt_measures') {
+                const measuresKey = results[key];
+                console.log(measuresKey)
+                // left off here
+            }
+            else {
+                const ids = document.querySelectorAll('#' + key);
+                for (let i = 0; i < ids.length; i++) {
+                    ids[i].textContent = results[key];
+                }
+            }
+        });
 
         var options = {
-            showServingUnitQuantity : false,
+            showServingUnitQuantity : true,
+            showServingWeightGrams : true,
             showAmountPerServing : false,
-            showCalorieDiet : true,
+            showCalorieDiet : false,
             showIngredients : false,
+            showItemName : false,
             itemName : results.food_name,
+
+            decimalPlacesForNutrition : 1,
+            allowFDARounding : true,
         
             showPolyFat : false,
             showMonoFat : false,
@@ -133,6 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
             showIron : false,
             showFatCalories : false,
             showCaffeine : false,
+
+            valueServingUnitQuantity : results.serving_qty,
+            valueServingSizeUnit : results.serving_unit,
+            valueServingWeightGrams : results.serving_weight_grams,
         
             valueCalories : results.nf_calories,
             valueTotalFat : results.nf_total_fat,
@@ -150,24 +167,18 @@ document.addEventListener('DOMContentLoaded', () => {
             showLegacyVersion : false
         }
 
+        // if added sugars is not included, set the added sugar option to true
+        // else (it is included) show the value of added sugars
         if (typeof results.nf_added_sugars === 'undefined') {
             options.naAddedSugars = true;
         } else {
             options.valueAddedSugars = results.nf_added_sugars;
         }
-
-        $('#nutritionLabel').nutritionLabel(options);
         
+        // jquery plugin to create an FDA-like nutrition label. 
+        // options var holds the sesttings for the plugin so added sugars can be toggled
+        $('#nutritionLabel').nutritionLabel(options);
+        $('#nutritionLabel2').nutritionLabel(options);        
     }
     
-    function displayFood(results, common) {
-        Object.entries(results).forEach(([key, value]) => {
-          const p = document.createElement('p');
-          p.textContent = `${key}: ${value}`;
-          common.appendChild(p);
-        });
-    }
-
-
-      
 });
