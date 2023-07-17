@@ -45,3 +45,43 @@ results = {
 }
 
 print(results)
+
+
+
+# backup of add():
+# @app.route("/add", methods=["GET", "POST"])
+# @login_required
+# def add():
+#     if request.method == "POST":
+#         # retrieve the query to be passed to the API function
+#         query = request.form.get("add-food")
+#         # retrieve the type (common/branded) to determine running add_common_food or add_branded_food function
+#         category = request.headers.get("category")
+#         if category == "common":
+#             # if query is not empty
+#             if query:
+#                 # pass the query to the API function and save results in memory to results var
+#                 results = add_common_food(query)
+#                 # return a flask.Response object that is of type JSON
+#                 return jsonify(results)
+#             else:
+#                 return jsonify([])
+#         elif category == "branded":
+#             if query:
+#                 results = add_branded_food(query)
+#                 return jsonify(results)
+#             else:
+#                 return jsonify([])
+#         else:
+#             return render_template("add.html", results={"food_name": "test1"})
+#     elif request.method == "GET":
+#         query = request.args.get("add-food")
+#         category = request.args.get("category")
+#         print(f"QUERY: {query}    CATEGORY: {category}")
+#         if query:
+#             if category == "common":
+#                 results = add_common_food(query)
+#             elif category == "branded":
+#                 results = add_branded_food(query)
+#         print(f"RESULTS: {results}")
+#         return render_template("add.html", results=results)

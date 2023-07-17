@@ -45,32 +45,18 @@ def index():
     else:
         return render_template("index.html")
     
-@app.route("/add", methods=["GET", "POST"])
+@app.route("/add")
 @login_required
 def add():
-    results = {}
-    if request.method == "POST":
-        # retrieve the query to be passed to the API function
-        query = request.form.get("add-food")
-        # retrieve the type (common/branded) to determine running add_common_food or add_branded_food function
-        type = request.headers.get("type")
-        if type == "common":
-            # if query is not empty
-            if query:
-                # pass the query to the API function and save results in memory to results var
-                results = add_common_food(query)
-                # return a flask.Response object that is of type JSON
-                return jsonify(results)
-            else:
-                return jsonify([])
-        elif type == "branded":
-            if query:
-                results = add_branded_food(query)
-                return jsonify(results)
-            else:
-                return jsonify([])
-    else:
-        return render_template("add.html", results=results)
+    query = request.args.get("add-food")
+    category = request.args.get("category")
+    # print(f"QUERY: {query}    CATEGORY: {category}")
+    if category == "common":
+        results = add_common_food(query)
+    elif category == "branded":
+        results = add_branded_food(query)
+    # print(f"RESULTS: {results}")
+    return render_template("add.html", results=results)
 
 
 @app.route("/login", methods=["GET", "POST"])

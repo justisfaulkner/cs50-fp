@@ -73,6 +73,7 @@ def add_common_food(query):
     headers = {
         "x-app-id": app_id,
         "x-app-key": api_key,
+        "x-remote-user-id": "0" # set to 0 during development
     }
 
     # set parmeters for the query, right now query is all I have, but can filter and sort if needed I think
@@ -95,6 +96,7 @@ def add_branded_food(query):
     headers = {
     "x-app-id": app_id,
     "x-app-key": api_key,
+    "x-remote-user-id": "0" # set to 0 during development
     }
 
     # set parmeters for the query, right now query is all I have, but can filter and sort if needed I think

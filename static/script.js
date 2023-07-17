@@ -79,25 +79,19 @@ document.addEventListener('DOMContentLoaded', () => {
         nutrientButtons.forEach(button => {
           button.addEventListener('click', () => {
             const query = button.value;
-            const type = button.getAttribute("data-type")
-            fetch('/add', {
-                method: 'POST',
-                body: new URLSearchParams({ 'add-food': query }),
-                headers: {'type': type}
-            })
-            .then(response => response.json())
-            .then(results => {
-                switchWindow("/add?results=" + encodeURIComponent(JSON.stringify(results)));
-            });
+            const category = button.getAttribute("data-type")
+            switchWindow(query, category)
           })
         });
+        
     }
       
-    function switchWindow(page) {
-        window.location.assign(page);
+    function switchWindow(query, category) {
+        const url = `/add?add-food=${query}&category=${category}`;
+        window.location.assign(url);
     }
 
-    if (currentURL.includes("/add?results=")) {
+    if (currentURL.includes("/add?add-food=")) {
         const urlParams = new URLSearchParams(window.location.search);
         const resultsString = urlParams.get('results');
         const results = JSON.parse(resultsString);
