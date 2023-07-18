@@ -24,8 +24,7 @@ response = requests.post(end_pt_url, data=body, headers=headers)
 data = response.json()
 
 results = {
-    key: hit[key]
-    if key != "photo" else hit["photo"]["highres"]
+    key: hit[key] if key != "photo" else hit["photo"]["highres"]
     for hit in data["foods"]
     for key in [
         "food_name",
@@ -45,7 +44,6 @@ results = {
 }
 
 print(results)
-
 
 
 # backup of add():

@@ -44,7 +44,8 @@ def index():
             return jsonify([])
     else:
         return render_template("index.html")
-    
+
+
 @app.route("/add")
 @login_required
 def add():

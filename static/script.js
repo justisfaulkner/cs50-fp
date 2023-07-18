@@ -31,19 +31,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function displaySearch(results) {
         clearResults();
+        console.log(results)
         results.forEach(result => {
-            // maybe I can make a list item that has a button inside of it, along with image kcals, etc. 
+            // maybe I can make a list item or some other element that has a button inside of it, along with image kcals, etc. 
             // right now its just a button
-            const button = document.createElement('button');
-            const resultText = Object.values(result)[0];
-            button.textContent = resultText;
-            if (Object.keys(result)[0] == 'common') {
+            const button = document.createElement('button')
+            if (Object.values(result)[0] == 'common') {
+                const resultText = Object.values(result)[1]; // index needs to be food_name
+                button.textContent = resultText;
                 button.setAttribute('data-type', 'common')
-                button.setAttribute('value', Object.values(result)[1])                
+                button.setAttribute('value', Object.values(result)[2]) // index needs to be search_id             
             }
-            else {
+            else if (Object.values(result)[0] == 'branded') {
+                const resultText = Object.values(result)[3]; // index needs to be food_name
+                button.textContent = resultText;                
                 button.setAttribute('data-type', 'branded')
-                button.setAttribute('value', Object.values(result)[1]) 
+                button.setAttribute('value', Object.values(result)[4]) // index needs to be search_id 
             }
             resultsList.appendChild(button);
         });
