@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentPath = window.location.pathname;
     const currentURL = window.location.href
     const searchInput = document.getElementById('food-search');
-    const resultsList = document.getElementById('results');
+    const resultsContainer = document.getElementById('results-container');
     const filterButtons = document.querySelectorAll('#filter');
 
     let timerId;
@@ -31,29 +31,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function displaySearch(results) {
         clearResults();
-        console.log(results)
         results.forEach(result => {
             // maybe I can make a list item or some other element that has a button inside of it, along with image kcals, etc. 
             // right now its just a button
             const button = document.createElement('button')
-            if (Object.values(result)[0] == 'common') {
-                const resultText = Object.values(result)[1]; // index needs to be food_name
-                button.textContent = resultText;
-                button.setAttribute('data-type', 'common')
-                button.setAttribute('value', Object.values(result)[2]) // index needs to be search_id             
-            }
-            else if (Object.values(result)[0] == 'branded') {
-                const resultText = Object.values(result)[3]; // index needs to be food_name
-                button.textContent = resultText;                
-                button.setAttribute('data-type', 'branded')
-                button.setAttribute('value', Object.values(result)[4]) // index needs to be search_id 
-            }
-            resultsList.appendChild(button);
+            button.textContent = result.food_name
+            button.setAttribute('data-type', result.a1)
+            button.setAttribute('value', result.search_id)
+            console.log(button)           
+            resultsContainer.appendChild(button);
         });
     }
     
     function clearResults() {
-        resultsList.innerHTML = '';
+        resultsContainer.innerHTML = '';
     }
 
     filterButtons.forEach(button => {
@@ -64,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     function filter(category) {     
-        const displayedItems = Array.from(resultsList.querySelectorAll('button'));  
+        const displayedItems = Array.from(resultsContainer.querySelectorAll('button'));  
         
         displayedItems.forEach(item => {
             if (category === 'all') {
@@ -78,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addFood() {
-        const nutrientButtons = Array.from(resultsList.querySelectorAll('button'));
+        const nutrientButtons = Array.from(resultsContainer.querySelectorAll('button'));
         nutrientButtons.forEach(button => {
           button.addEventListener('click', () => {
             const query = button.value;
