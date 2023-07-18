@@ -32,20 +32,19 @@ app.secret_key = key
 db = SQL("sqlite:///database.db")
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 @login_required
 def index():
     # can probably simplify this with GET and window.location.assign in JS like I did with def(add)
-    if request.method == "POST":
-        query = request.form.get("food-search")
-        if query and len(query) >= 3:
-            results = search_food(query)
-            return jsonify(results)
-        else:
-            return jsonify([])
+    query = request.args.get("search-food")
+    if query and len(query) >= 3:
+        search_results = search_food(query)
+        search_results_dict = search_results
+        search_results = json.dumps(search_results)
+        return render_template("index.html", search_results=search_results, search_results_dict=search_results_dict)
     else:
-        return render_template("index.html")
-
+        return render_template("index.html", search_results={}, search_results_dict={"testing": "testing"})
+    
 
 @app.route("/add")
 @login_required
