@@ -7,30 +7,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let timerId;
 
-
     if (currentPath === '/index.html' || currentPath === '/') {
-        // const flaskSearchResults = document.getElementById("search-results").getAttribute("data-search-results")
-        // const searchResults = JSON.parse(flaskSearchResults)
         searchInput.addEventListener('input', () => {
             clearTimeout(timerId)
             timerId = setTimeout(() => {
                 const query = searchInput.value;
-                let url = `/?search-food=${query}`;
                 if (query.length >= 3) {
-                    changeURL(query)
-                    fetch('/')
+                    fetch('/', {
+                        method: 'POST',
+                        body: new URLSearchParams({ 'food-search': query })
+                    })
                     .then(response => response.json())
-                    .then(data =>{
-                        const searchResults = data.search_results
-                        console.log(searchResults)
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
-                    
-                    // addFood()
+                    .then(results => {
+                        displaySearch(results);
+                        addFood();
+                    });
                 } else {
-                    // clearResults();
+                    clearResults();
                 }
             }, 300);
         });
@@ -84,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
           });
     }
 
-    // this will need to change to get the proper buttons
     function addFood() {
         const nutrientButtons = Array.from(resultsList.querySelectorAll('button'));
         nutrientButtons.forEach(button => {
@@ -95,16 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
           })
         });
         
-    }
-
-    function changeURL(query) {
-        let URL = window.location.href
-        const lastSlashIndex = URL.lastIndexOf('/')
-        if (lastSlashIndex !== -1) {
-            URL = URL.substring(0, lastSlashIndex)
-        }
-        const newURL = `${URL}?search-food=${query}`
-        window.history.pushState(null, '', newURL)
     }
       
     function switchWindow(query, category) {

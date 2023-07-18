@@ -6,11 +6,6 @@
 
 {% block main %}
 
-    <!-- search_results for JS search_results_dict for HTML/Jinja -->
-    
-    <!-- set search_results so I can access in JS -->
-    <div id="search-results" data-search-results="{{ search_results }}"></div>
-
     <h4>JTrack Food Search</h4>
     <form method="post" action="/">
         <div class="mb-3"> 
@@ -22,18 +17,7 @@
         <button class="btn btn-primary" id="filter" data-type="common">Common</button>
         <button class="btn btn-primary" id="filter" data-type="branded">Branded</button>
     </div>
-    <div class ="search container">
-        <div>{{ search_results_dict }}</div>
-        {% if search_results_dict %}
-            <div>testing to make sure blank</div>
-            <div>{{ search_results_dict }}</div>
-            {% for result in search_results_dict %}
-            <ul>
-                {{ result.food_name }}
-            </ul>
-            {% endfor %}
-        {% endif %}
-    </div>
+    <ul id="results"></ul>
 
 
 {% endblock %}
