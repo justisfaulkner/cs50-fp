@@ -81,9 +81,9 @@ def search_food(query):
                         "thumb": thumb
                     }
                 )
-        elif hit == "self":
-            ...
-            # can add self here down the line if I include the relevant header for the user
+        # can add self here down the line if I include the relevant header for the user
+        # elif hit == "self":
+            # ...
 
     return results
 

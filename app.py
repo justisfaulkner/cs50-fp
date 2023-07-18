@@ -35,6 +35,7 @@ db = SQL("sqlite:///database.db")
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
+    # can probably simplify this with GET and window.location.assign in JS like I did with def(add)
     if request.method == "POST":
         query = request.form.get("food-search")
         if query and len(query) >= 3:
