@@ -54,8 +54,9 @@ def add():
         results = add_common_food(query)
     elif category == "branded":
         results = add_branded_food(query)
+    results_dict = results
     results = json.dumps(results)
-    return render_template("add.html", results=results)
+    return render_template("add.html", results=results, results_dict=results_dict)
 
 
 @app.route("/login", methods=["GET", "POST"])
