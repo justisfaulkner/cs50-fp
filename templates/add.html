@@ -6,8 +6,12 @@
 
 {% block main %}
     
-    <!-- test -->
-    <div> {{ results.alt_measures[1] }} </div>
+    <!-- set results so I can access in JS -->
+    <div id="APIresults" data-api-results="{{ results }}"></div>
+
+    <!-- test to get at alt_measures values -->
+    <div> {{ results.alt_measures[1].serving_weight }} </div>
+    <div> {{ results.alt_measures[1].measure }} </div>
     
     <!-- have to use id names here then set the text, src, etc. in JS -->
     <img id="photo">

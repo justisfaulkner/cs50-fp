@@ -50,12 +50,11 @@ def index():
 def add():
     query = request.args.get("add-food")
     category = request.args.get("category")
-    # print(f"QUERY: {query}    CATEGORY: {category}")
     if category == "common":
         results = add_common_food(query)
     elif category == "branded":
         results = add_branded_food(query)
-    # print(f"RESULTS: {results}")
+    results = json.dumps(results)
     return render_template("add.html", results=results)
 
 

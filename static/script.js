@@ -92,29 +92,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (currentURL.includes("/add?add-food=")) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const resultsString = urlParams.get('results');
-        const results = JSON.parse(resultsString);
+        const flaskResults = document.getElementById("APIresults").getAttribute("data-api-results")
+        const jsResults = JSON.parse(flaskResults)
 
-        console.log(results)
-
-        const keys = Object.keys(results);
+        const keys = Object.keys(jsResults);
         keys.forEach(key => {
             if (key === 'photo') {
                 const ids = document.querySelectorAll('#' + key);
                 for (let i = 0; i < ids.length; i++) {
-                    ids[i].src = results[key];
+                    ids[i].src = jsResults[key];
                 }
             }    
             else if (key === 'alt_measures') {
-                const measuresKey = results[key];
+                const measuresKey = jsResults[key];
                 console.log(measuresKey)
                 // left off here
             }
             else {
                 const ids = document.querySelectorAll('#' + key);
                 for (let i = 0; i < ids.length; i++) {
-                    ids[i].textContent = results[key];
+                    ids[i].textContent = jsResults[key];
                 }
             }
         });
@@ -126,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showCalorieDiet : false,
             showIngredients : false,
             showItemName : false,
-            itemName : results.food_name,
+            itemName : jsResults.food_name,
 
             decimalPlacesForNutrition : 1,
             allowFDARounding : true,
@@ -141,19 +138,19 @@ document.addEventListener('DOMContentLoaded', () => {
             showFatCalories : false,
             showCaffeine : false,
 
-            valueServingUnitQuantity : results.serving_qty,
-            valueServingSizeUnit : results.serving_unit,
-            valueServingWeightGrams : results.serving_weight_grams,
+            valueServingUnitQuantity : jsResults.serving_qty,
+            valueServingSizeUnit : jsResults.serving_unit,
+            valueServingWeightGrams : jsResults.serving_weight_grams,
         
-            valueCalories : results.nf_calories,
-            valueTotalFat : results.nf_total_fat,
-            valueSatFat : results.nf_saturated_fat,
-            valueCholesterol : results.nf_cholesterol,
-            valueSodium : results.nf_sodium,
-            valueTotalCarb : results.nf_total_carbohydrate,
-            valueFibers : results.nf_dietary_fiber,
-            valueSugars : results.nf_sugars,
-            valueProteins : results.nf_protein,
+            valueCalories : jsResults.nf_calories,
+            valueTotalFat : jsResults.nf_total_fat,
+            valueSatFat : jsResults.nf_saturated_fat,
+            valueCholesterol : jsResults.nf_cholesterol,
+            valueSodium : jsResults.nf_sodium,
+            valueTotalCarb : jsResults.nf_total_carbohydrate,
+            valueFibers : jsResults.nf_dietary_fiber,
+            valueSugars : jsResults.nf_sugars,
+            valueProteins : jsResults.nf_protein,
             valueVitaminD : "no functionality",
             valuePotassium_2018 : "no functionality",
             valueCalcium : "no functionality",
@@ -163,10 +160,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // if added sugars is not included, set the added sugar option to true
         // else (it is included) show the value of added sugars
-        if (typeof results.nf_added_sugars === 'undefined') {
+        if (typeof jsResults.nf_added_sugars === 'undefined') {
             options.naAddedSugars = true;
         } else {
-            options.valueAddedSugars = results.nf_added_sugars;
+            options.valueAddedSugars = jsResults.nf_added_sugars;
         }
         
         // jquery plugin to create an FDA-like nutrition label. 
