@@ -111,10 +111,23 @@ h1 {
     align-items: center;
 }
 
+.item-container .item-thumbnail,
+.item-container .item-content {
+    display: flex;
+    align-items: center;
+}
+
+.item-container:hover{
+    background-color: #f2f2f2;
+}
+
 .item-thumbnail {
-    display: block;
+    position: relative;
+    bottom: 50%;
+    transform: translateY(50%);
     width: 100px;
-    padding-left: 20px;
+    float: left;
+    padding-left: 15px;
     margin-right: -20px; 
 }
 
