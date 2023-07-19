@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function displaySearch(results) {
         clearResults();
         resultsWrapper.style.display = 'block';
+
         results.forEach(result => {
           const buttonItemContainer = document.createElement('button');
           buttonItemContainer.setAttribute('class', 'item-container');
@@ -88,6 +89,28 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsContainer.innerHTML = '';
         resultsWrapper.style.display = 'none';
     }
+
+    function hideResultsWrapper(event) {
+        const targetElement = event.target;
+        
+        // Check if the clicked element is the container or a child element of the container
+        if (!resultsWrapper.contains(targetElement)) {
+          resultsWrapper.style.display = 'none'; // Hide the container
+        }
+      }
+      
+      function showResultsWrapper() {
+        if (resultsContainer.children.length > 0) {
+            resultsWrapper.style.display = 'block'; // Show the container
+        }
+        
+      }
+      
+      // Listen for click events on the window
+      window.addEventListener('mousedown', hideResultsWrapper);
+      
+      // Listen for focus event on the search input
+      searchInput.addEventListener('focus', showResultsWrapper);
 
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {

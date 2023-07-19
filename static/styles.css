@@ -12,6 +12,7 @@ h1 {
     justify-content: center;
     width: 40%;
     margin: 0 auto;
+    position: relative;
 }
 
 .input-results-wrapper {
@@ -26,8 +27,14 @@ h1 {
     border-bottom: 1px solid #CED4DA;
     border-radius: 2px;
     display: none;
+    /* display: block; -- on show (with JS) */
+    position: absolute;
+    top: 110%;
+    left: 0;
+    z-index: 1;
+    min-width: 100%;
 }
-  
+
 .filter-buttons-container {
     display: flex;
     flex-direction: row;
@@ -47,7 +54,7 @@ h1 {
     margin-right: 3px;
     font-size: 14px;
     margin-top: auto;
-    
+
 }
 
 #results-container {
@@ -57,6 +64,8 @@ h1 {
     background-color: white;
     border: 3px solid #f2f2f2;
     border-radius: 1px;
+    max-height: 55vh;
+    overflow: auto;
 }
 
 #results-container button {
@@ -127,7 +136,7 @@ h1 {
     width: 100px;
     float: left;
     padding-left: 15px;
-    margin-right: -20px; 
+    margin-right: -20px;
 }
 
 .item-thumbnail img {
@@ -169,4 +178,3 @@ h1 {
 .item-cals {
     font-size: smaller;
 }
-  
