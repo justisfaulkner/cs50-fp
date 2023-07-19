@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('food-search');
     const resultsContainer = document.getElementById('results-container');
     const filterButtons = document.querySelectorAll('#filter');
+    const resultsWrapper = document.getElementById('results-wrapper')
 
     let timerId;
 
@@ -31,20 +32,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function displaySearch(results) {
         clearResults();
+        resultsWrapper.style.display = 'block';
         results.forEach(result => {
-            // maybe I can make a list item or some other element that has a button inside of it, along with image kcals, etc. 
-            // right now its just a button
-            const button = document.createElement('button')
-            button.textContent = result.food_name
-            button.setAttribute('data-type', result.a1)
-            button.setAttribute('value', result.search_id)
-            console.log(button)           
-            resultsContainer.appendChild(button);
+          const buttonItemContainer = document.createElement('button');
+          buttonItemContainer.setAttribute('class', 'item-container');
+          buttonItemContainer.setAttribute('data-type', result.a1);
+          buttonItemContainer.setAttribute('value', result.search_id);
+          resultsContainer.appendChild(buttonItemContainer);
+      
+          const divItemThumbnail = document.createElement('div');
+          divItemThumbnail.setAttribute('class', 'item-thumbnail');
+          buttonItemContainer.appendChild(divItemThumbnail);
+      
+          const img = document.createElement('img');
+          img.setAttribute('class', 'item-image');
+          img.setAttribute('src', result.thumb);
+          divItemThumbnail.appendChild(img);
+      
+          const itemContent = document.createElement('div');
+          itemContent.setAttribute('class', 'item-content');
+          buttonItemContainer.appendChild(itemContent);
+      
+          const itemLeftContent = document.createElement('div');
+          itemLeftContent.setAttribute('class', 'item-left-content');
+          itemContent.appendChild(itemLeftContent);
+      
+          const itemFoodName = document.createElement('div');
+          itemFoodName.setAttribute('class', 'item-food-name');
+          itemFoodName.textContent = result.food_name
+          itemLeftContent.appendChild(itemFoodName);
+      
+          const itemBrandName = document.createElement('div');
+          itemBrandName.setAttribute('class', 'item-brand-name');
+          itemBrandName.textContent = result.brand_name
+          itemLeftContent.appendChild(itemBrandName);
+
+          const itemRightContent = document.createElement('div');
+          itemRightContent.setAttribute('class', 'item-right-content');
+          itemContent.appendChild(itemRightContent);
+
+          const itemCalories = document.createElement('div');
+          itemCalories.setAttribute('class', 'item-calories');
+          itemCalories.textContent = result.calories
+          itemRightContent.appendChild(itemCalories);
+
+          const itemCals = document.createElement('div');
+          itemCals.setAttribute('class', 'item-cals');
+          itemCals.textContent = "cals"
+          itemRightContent.appendChild(itemCals);
         });
-    }
+      }
+      
     
     function clearResults() {
         resultsContainer.innerHTML = '';
+        resultsWrapper.style.display = 'none';
     }
 
     filterButtons.forEach(button => {

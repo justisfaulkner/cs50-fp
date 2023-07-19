@@ -59,6 +59,8 @@ def search_food(query):
                 results.append(
                     {
                         "a1": "common",
+                        "brand_name": "unbranded",
+                        "calories": "",
                         "food_name": food_name, 
                         "search_id": search_id, 
                         "thumb": thumb
