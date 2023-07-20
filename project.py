@@ -54,16 +54,38 @@ def search_food(query):
         if hit == "common":
             for item in data["common"]:
                 food_name = item["food_name"]
-                nutrients = item["food_name"]  # /natural/nutrients endpoint
-                results.append({"common": food_name, "nutrients": nutrients})
+                thumb = item["photo"]["thumb"]
+                search_id = item["food_name"]  # /natural/nutrients endpoint
+                results.append(
+                    {
+                        "a1": "common",
+                        "brand_name": "unbranded",
+                        "calories": "",
+                        "food_name": food_name, 
+                        "search_id": search_id, 
+                        "thumb": thumb
+                    }
+                )
         elif hit == "branded":
             for item in data["branded"]:
-                food_name = item["brand_name_item_name"]
-                nutrients = item["nix_item_id"]  # /search/item endpoint
-                results.append({"branded": food_name, "nutrients": nutrients})
-        elif hit == "self":
-            ...
-            # can add self here down the line if I include the relevant header for the user
+                food_name = item["food_name"]
+                brand_name = item["brand_name"]
+                calories = item["nf_calories"]
+                thumb = item["photo"]["thumb"]
+                search_id = item["nix_item_id"]  # /search/item endpoint
+                results.append(
+                    {
+                        "a1": "branded",
+                        "brand_name": brand_name,
+                        "calories": calories,
+                        "food_name": food_name,
+                        "search_id": search_id,
+                        "thumb": thumb
+                    }
+                )
+        # can add self here down the line if I include the relevant header for the user
+        # elif hit == "self":
+            # ...
 
     return results
 
@@ -73,12 +95,13 @@ def add_common_food(query):
     headers = {
         "x-app-id": app_id,
         "x-app-key": api_key,
+        "x-remote-user-id": "0",  # set to 0 during development
     }
 
     # set parmeters for the query, right now query is all I have, but can filter and sort if needed I think
     body = {
         "query": query,
-        # "timezone": "timezone variable -- need to create this var from users timezone"    
+        # "timezone": "timezone variable -- need to create this var from users timezone"
     }
 
     # set the end point for search/instant
@@ -91,49 +114,48 @@ def add_common_food(query):
 
 
 def add_branded_food(query):
-     # set /search/item endpoint specefic headers
+    # set /search/item endpoint specefic headers
     headers = {
-    "x-app-id": app_id,
-    "x-app-key": api_key,
+        "x-app-id": app_id,
+        "x-app-key": api_key,
+        "x-remote-user-id": "0",  # set to 0 during development
     }
 
     # set parmeters for the query, right now query is all I have, but can filter and sort if needed I think
     params = {"nix_item_id": query}
 
     # set the end point for search/instant
-    end_pt_url = "https://trackapi.nutritionix.com/v2/search/item"    
+    end_pt_url = "https://trackapi.nutritionix.com/v2/search/item"
 
     response = requests.get(end_pt_url, params=params, headers=headers)
     data = response.json()
-    
+
     return add_food_results(data)
 
 
 def add_food_results(data):
-
     results = {
-    key: hit[key]
-    if key != "photo" else hit["photo"]["thumb"]
-    for hit in data["foods"]
-    for key in [
-        "food_name",
-        "brand_name",
-        "serving_qty",
-        "serving_unit",
-        "serving_weight_grams",
-        "nf_calories",
-        "nf_total_fat",
-        "nf_saturated_fat",
-        "nf_cholesterol",
-        "nf_sodium",
-        "nf_total_carbohydrate",
-        "nf_dietary_fiber",
-        "nf_sugars",
-        "full_nutrients",
-        "nf_protein",
-        "photo",
-        "alt_measures",
-    ]
+        key: hit[key] if key != "photo" else hit["photo"]["thumb"]
+        for hit in data["foods"]
+        for key in [
+            "food_name",
+            "brand_name",
+            "serving_qty",
+            "serving_unit",
+            "serving_weight_grams",
+            "nf_calories",
+            "nf_total_fat",
+            "nf_saturated_fat",
+            "nf_cholesterol",
+            "nf_sodium",
+            "nf_total_carbohydrate",
+            "nf_dietary_fiber",
+            "nf_sugars",
+            "full_nutrients",
+            "nf_protein",
+            "photo",
+            "alt_measures",
+        ]
     }
 
     # if food has added_sugars nutrient information, retrieve it and add it to the results dict
@@ -142,14 +164,14 @@ def add_food_results(data):
             results["nf_added_sugars"] = nutrient["value"]
             del results["full_nutrients"]
             break
-    
+
     # either way, delete the full nutrients key
     try:
         if results["full_nutrients"]:
             del results["full_nutrients"]
     except:
         KeyError()
-    
+
     return results
 
 

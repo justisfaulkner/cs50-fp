@@ -1,48 +1,63 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Add Food
+Add Food
 {% endblock %}
 
 {% block main %}
-    
-    <!-- have to use id names here then set the text, src, etc. in JS -->
-    <img id="photo">
-    <h3 id="food_name"></h3>
-    <div id="brand_name"></div>
 
-    <p id="alt_measures"></p>
+<!-- results for JS  -->
+<!-- results_dict for HTML/Jinja -->
 
-    <div class="label-container">
-        <div class="label" id="nutritionLabel"></div>
-    </div> 
+<!-- set results so I can access in JS -->
+<div id="APIresults" data-api-results="{{ results }}"></div>
 
-    <h5>Macros:</h5>
+<!-- test to get at alt_measures values from results_dict CAN NOT USE results var - that is for JS use -->
+{% if results_dict.alt_measures is not none %}
+{% for measure in results_dict.alt_measures %}
+<div>{{ measure.serving_weight }}</div>
+{% endfor %}
+{% endif %}
 
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-        Add Food
-    </button>
-  
-    <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+
+
+<!-- have to use id names here then set the text, src, etc. in JS -->
+<img id="photo">
+<h3 id="food_name"></h3>
+<div id="brand_name"></div>
+
+<p id="alt_measures"></p>
+
+<div class="label-container">
+    <div class="label" id="nutritionLabel"></div>
+</div>
+
+<h5>Macros:</h5>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Add Food
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">JTrack & Logo</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">JTrack & Logo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                
+
                 <h3 id="food_name"></h3>
                 <div id="brand_name"></div>
-                
+
                 <hr>
 
                 <div class="label" id="nutritionLabel2"></div>
 
                 <hr>
-                
+
                 <button class="btn btn-outline-primary btn-sm">Breakfast</button>
                 <button class="btn btn-outline-primary btn-sm">Lunch</button>
                 <button class="btn btn-outline-primary btn-sm">Dinner</button>
@@ -53,7 +68,7 @@
                 <button type="button" class="btn btn-primary">Add Food</button>
             </div>
         </div>
-        </div>
     </div>
+</div>
 
 {% endblock %}

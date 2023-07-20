@@ -2,10 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentPath = window.location.pathname;
     const currentURL = window.location.href
     const searchInput = document.getElementById('food-search');
-    const resultsList = document.getElementById('results');
+    const searchForm = document.getElementById('search-form')
+    const resultsContainer = document.getElementById('results-container');
     const filterButtons = document.querySelectorAll('#filter');
+    const resultsWrapper = document.getElementById('results-wrapper')
 
     let timerId;
+
+    searchForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+    });
 
     if (currentPath === '/index.html' || currentPath === '/') {
         searchInput.addEventListener('input', () => {
@@ -31,27 +37,85 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function displaySearch(results) {
         clearResults();
+        resultsWrapper.style.display = 'block';
+
         results.forEach(result => {
-            // maybe I can make a list item that has a button inside of it, along with image kcals, etc. 
-            // right now its just a button
-            const button = document.createElement('button');
-            const resultText = Object.values(result)[0];
-            button.textContent = resultText;
-            if (Object.keys(result)[0] == 'common') {
-                button.setAttribute('data-type', 'common')
-                button.setAttribute('value', Object.values(result)[1])                
-            }
-            else {
-                button.setAttribute('data-type', 'branded')
-                button.setAttribute('value', Object.values(result)[1]) 
-            }
-            resultsList.appendChild(button);
+          const buttonItemContainer = document.createElement('button');
+          buttonItemContainer.setAttribute('class', 'item-container');
+          buttonItemContainer.setAttribute('data-type', result.a1);
+          buttonItemContainer.setAttribute('value', result.search_id);
+          resultsContainer.appendChild(buttonItemContainer);
+      
+          const divItemThumbnail = document.createElement('div');
+          divItemThumbnail.setAttribute('class', 'item-thumbnail');
+          buttonItemContainer.appendChild(divItemThumbnail);
+      
+          const img = document.createElement('img');
+          img.setAttribute('class', 'item-image');
+          img.setAttribute('src', result.thumb);
+          divItemThumbnail.appendChild(img);
+      
+          const itemContent = document.createElement('div');
+          itemContent.setAttribute('class', 'item-content');
+          buttonItemContainer.appendChild(itemContent);
+      
+          const itemLeftContent = document.createElement('div');
+          itemLeftContent.setAttribute('class', 'item-left-content');
+          itemContent.appendChild(itemLeftContent);
+      
+          const itemFoodName = document.createElement('div');
+          itemFoodName.setAttribute('class', 'item-food-name');
+          itemFoodName.textContent = result.food_name
+          itemLeftContent.appendChild(itemFoodName);
+      
+          const itemBrandName = document.createElement('div');
+          itemBrandName.setAttribute('class', 'item-brand-name');
+          itemBrandName.textContent = result.brand_name
+          itemLeftContent.appendChild(itemBrandName);
+
+          const itemRightContent = document.createElement('div');
+          itemRightContent.setAttribute('class', 'item-right-content');
+          itemContent.appendChild(itemRightContent);
+
+          const itemCalories = document.createElement('div');
+          itemCalories.setAttribute('class', 'item-calories');
+          itemCalories.textContent = result.calories
+          itemRightContent.appendChild(itemCalories);
+
+          const itemCals = document.createElement('div');
+          itemCals.setAttribute('class', 'item-cals');
+          itemCals.textContent = "cals"
+          itemRightContent.appendChild(itemCals);
         });
-    }
+      }
+      
     
     function clearResults() {
-        resultsList.innerHTML = '';
+        resultsContainer.innerHTML = '';
+        resultsWrapper.style.display = 'none';
     }
+
+    function hideResultsWrapper(event) {
+        const targetElement = event.target;
+        
+        // Check if the clicked element is the container or a child element of the container
+        if (!resultsWrapper.contains(targetElement) && !searchForm.contains(targetElement)) {
+          resultsWrapper.style.display = 'none'; // Hide the container
+        }
+      }
+      
+      function showResultsWrapper() {
+        if (resultsContainer.children.length > 0) {
+            resultsWrapper.style.display = 'block'; // Show the container
+        }
+        
+      }
+      
+      // Listen for click events on the window
+      window.addEventListener('mousedown', hideResultsWrapper);
+      
+      // Listen for focus event on the search input
+      searchInput.addEventListener('focus', showResultsWrapper);
 
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -61,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     function filter(category) {     
-        const displayedItems = Array.from(resultsList.querySelectorAll('button'));  
+        const displayedItems = Array.from(resultsContainer.querySelectorAll('button'));  
         
         displayedItems.forEach(item => {
             if (category === 'all') {
@@ -75,52 +139,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addFood() {
-        const nutrientButtons = Array.from(resultsList.querySelectorAll('button'));
+        const nutrientButtons = Array.from(resultsContainer.querySelectorAll('button'));
         nutrientButtons.forEach(button => {
           button.addEventListener('click', () => {
             const query = button.value;
-            const type = button.getAttribute("data-type")
-            fetch('/add', {
-                method: 'POST',
-                body: new URLSearchParams({ 'add-food': query }),
-                headers: {'type': type}
-            })
-            .then(response => response.json())
-            .then(results => {
-                switchWindow("/add?results=" + encodeURIComponent(JSON.stringify(results)));
-            });
+            const category = button.getAttribute("data-type")
+            switchWindow(query, category)
           })
         });
+        
     }
       
-    function switchWindow(page) {
-        window.location.assign(page);
+    function switchWindow(query, category) {
+        const url = `/add?add-food=${query}&category=${category}`;
+        window.location.assign(url);
     }
 
-    if (currentURL.includes("/add?results=")) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const resultsString = urlParams.get('results');
-        const results = JSON.parse(resultsString);
+    if (currentURL.includes("/add?add-food=")) {
+        const flaskResults = document.getElementById("APIresults").getAttribute("data-api-results")
+        const jsResults = JSON.parse(flaskResults)
 
-        console.log(results)
-
-        const keys = Object.keys(results);
+        const keys = Object.keys(jsResults);
         keys.forEach(key => {
             if (key === 'photo') {
                 const ids = document.querySelectorAll('#' + key);
                 for (let i = 0; i < ids.length; i++) {
-                    ids[i].src = results[key];
+                    ids[i].src = jsResults[key];
                 }
             }    
             else if (key === 'alt_measures') {
-                const measuresKey = results[key];
+                const measuresKey = jsResults[key];
                 console.log(measuresKey)
                 // left off here
             }
             else {
                 const ids = document.querySelectorAll('#' + key);
                 for (let i = 0; i < ids.length; i++) {
-                    ids[i].textContent = results[key];
+                    ids[i].textContent = jsResults[key];
                 }
             }
         });
@@ -132,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showCalorieDiet : false,
             showIngredients : false,
             showItemName : false,
-            itemName : results.food_name,
+            itemName : jsResults.food_name,
 
             decimalPlacesForNutrition : 1,
             allowFDARounding : true,
@@ -147,19 +202,19 @@ document.addEventListener('DOMContentLoaded', () => {
             showFatCalories : false,
             showCaffeine : false,
 
-            valueServingUnitQuantity : results.serving_qty,
-            valueServingSizeUnit : results.serving_unit,
-            valueServingWeightGrams : results.serving_weight_grams,
+            valueServingUnitQuantity : jsResults.serving_qty,
+            valueServingSizeUnit : jsResults.serving_unit,
+            valueServingWeightGrams : jsResults.serving_weight_grams,
         
-            valueCalories : results.nf_calories,
-            valueTotalFat : results.nf_total_fat,
-            valueSatFat : results.nf_saturated_fat,
-            valueCholesterol : results.nf_cholesterol,
-            valueSodium : results.nf_sodium,
-            valueTotalCarb : results.nf_total_carbohydrate,
-            valueFibers : results.nf_dietary_fiber,
-            valueSugars : results.nf_sugars,
-            valueProteins : results.nf_protein,
+            valueCalories : jsResults.nf_calories,
+            valueTotalFat : jsResults.nf_total_fat,
+            valueSatFat : jsResults.nf_saturated_fat,
+            valueCholesterol : jsResults.nf_cholesterol,
+            valueSodium : jsResults.nf_sodium,
+            valueTotalCarb : jsResults.nf_total_carbohydrate,
+            valueFibers : jsResults.nf_dietary_fiber,
+            valueSugars : jsResults.nf_sugars,
+            valueProteins : jsResults.nf_protein,
             valueVitaminD : "no functionality",
             valuePotassium_2018 : "no functionality",
             valueCalcium : "no functionality",
@@ -169,10 +224,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // if added sugars is not included, set the added sugar option to true
         // else (it is included) show the value of added sugars
-        if (typeof results.nf_added_sugars === 'undefined') {
+        if (typeof jsResults.nf_added_sugars === 'undefined') {
             options.naAddedSugars = true;
         } else {
-            options.valueAddedSugars = results.nf_added_sugars;
+            options.valueAddedSugars = jsResults.nf_added_sugars;
         }
         
         // jquery plugin to create an FDA-like nutrition label. 
