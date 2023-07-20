@@ -2,11 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentPath = window.location.pathname;
     const currentURL = window.location.href
     const searchInput = document.getElementById('food-search');
+    const searchForm = document.getElementById('search-form')
     const resultsContainer = document.getElementById('results-container');
     const filterButtons = document.querySelectorAll('#filter');
     const resultsWrapper = document.getElementById('results-wrapper')
 
     let timerId;
+
+    searchForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+    });
 
     if (currentPath === '/index.html' || currentPath === '/') {
         searchInput.addEventListener('input', () => {
@@ -94,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetElement = event.target;
         
         // Check if the clicked element is the container or a child element of the container
-        if (!resultsWrapper.contains(targetElement)) {
+        if (!resultsWrapper.contains(targetElement) && !searchForm.contains(targetElement)) {
           resultsWrapper.style.display = 'none'; // Hide the container
         }
       }

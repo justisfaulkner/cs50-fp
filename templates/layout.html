@@ -42,10 +42,24 @@
                 {% if session["user_id"] %}
                 <ul class="navbar-nav me-auto mt-2">
                     <li class="nav-item"><a class="nav-link" href="#">Log</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">#</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/#">#</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/#">#</a></li>
                 </ul>
+                <div class="input-results-container">
+                    <div class="input-results-wrapper">
+                        <form id="search-form" method="post" action="/">
+                            <div>
+                                <input autocomplete="off" autofocus class="form-control input-form" type="text" id="food-search" name="food-search" placeholder="Search for a food">
+                            </div>
+                        </form>
+                        <div class="results-wrapper" id="results-wrapper">
+                            <div class="filter-buttons-container" id="filter-buttons-container">
+                                <button class="btn btn-primary filter-btn" id="filter" data-type="all">All</button>
+                                <button class="btn btn-primary filter-btn" id="filter" data-type="common">Common</button>
+                                <button class="btn btn-primary filter-btn" id="filter" data-type="branded">Branded</button>
+                            </div>
+                            <div id="results-container"></div>
+                        </div>
+                    </div>
+                </div> 
                 <ul class="navbar-nav ms-auto mt-2">
                     <li class="nav-item"><a class="nav-link" href="/account">Account</a> </li>
                     <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
