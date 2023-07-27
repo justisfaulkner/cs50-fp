@@ -1,6 +1,6 @@
-from flask import redirect, request, session
+from flask import redirect, request, session # delete request if not used
 from functools import wraps
-import json
+import json # delete if not used
 import requests
 
 # set app and API keys
@@ -33,7 +33,8 @@ def search_food(query):
     headers = {
         "x-app-id": app_id,
         "x-app-key": api_key,
-        # "x-user-jwt": "include if you want to have 'self' foods in the search/instant list of dicts"
+        "x-remote-user-id": "0",  # set to 0 during development
+        #"x-user-jwt": "0" include if you want to have 'self' foods in the search/instant list of dicts
         # "content-type": "application/json"
     }
 
@@ -83,7 +84,7 @@ def search_food(query):
                         "thumb": thumb
                     }
                 )
-        # can add self here down the line if I include the relevant header for the user
+        # can add self here down the line if I include the relevant header for the user (x-user-jtw)
         # elif hit == "self":
             # ...
 

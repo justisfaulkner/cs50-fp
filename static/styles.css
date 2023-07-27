@@ -178,3 +178,104 @@ h1 {
 .item-cals {
     font-size: smaller;
 }
+
+.modal-content-wrapper {
+    width: auto;
+}
+
+.modal-selector-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.form-control.add-food{
+    margin-right: 20px;
+    width: 100px;
+    /* border: 1px solid #0d6efd; */
+
+}
+
+.form-select.add-food {
+    margin-left: 20px;
+    width: fit-content;
+    /* border: 1px solid #0d6efd; */
+}
+
+.modal-nutrition-container {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #0d6efd;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+#modal-nutrition-1st {
+    padding: 10px;
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+#modal-nutrition-2nd {
+    padding: 10px;
+}
+
+#modal-nutrition-3rd {
+    padding: 10px;
+}
+
+.nutrient-pair {
+    display: flex;
+    justify-content: space-between;
+}
+
+.inline-items {
+    /* display: block; */
+    display: flex;
+    justify-content: space-between;
+    font-size: 80%;
+    /* text-align: left; */
+    color: #0d6efd;
+}
+
+.sub-inline-items {
+    /* display: block; */
+    display: flex;
+    justify-content: space-between;
+    font-size: 70%;
+    color: #6e9de2;
+    text-indent: 15px;
+    /* text-align: left; */
+}
+
+.nutrient-name {
+    font-weight: bold;
+    text-align: left;
+    width: 75px;
+}
+
+.sub-inline-items .nutrient-amount {
+    margin-left: -15px;
+}
+
+.vertical-line {
+    border-left: 1px solid #0d6efd;
+    height: 75px;
+    padding: 5px;
+}
+
+#meal-alert {
+    border: 1px solid #e31b2b;
+    border-radius: 5px;
+    color: #EA868F;
+    background-color: #4e060c;
+    align-items: center;
+    justify-content: center;
+    width: 85%;
+    height: 30px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    margin-top: -5px;
+}

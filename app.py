@@ -1,4 +1,5 @@
 from cs50 import SQL
+from datetime import date as dt, datetime 
 from flask import (
     Flask,
     jsonify,
@@ -8,9 +9,9 @@ from flask import (
     session,
     flash,
 )
-from flask_session import Session
+from flask_session import Session # delete Session if not used
 import json
-import requests
+import requests # delete if not used
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from project import login_required, search_food, add_common_food, add_branded_food
@@ -22,7 +23,7 @@ app = Flask(__name__)
 key = generate_secret_key(32)
 app.secret_key = key
 
-# figure out what this jargon means and why I can't need a secret key instead of using this.
+# figure out what this jargon means and why I need a secret key instead of using this.
 # why was this used in the finance prob set?
 # if I don't use this bit of code -- remove import of flask_session -> Session
 # app.config["SESSION_PERMANENT"] = False
@@ -35,8 +36,14 @@ db = SQL("sqlite:///database.db")
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
+    # going to need to figure out how to get this on multiple pages and multiple areas on the page
+        # maybe I put it in project.py and make a function called app_seach or something 
+        # then just call app_search
     # can probably simplify this with GET and window.location.assign in JS like I did with def(add)
-    if request.method == "POST":
+    if request.method == "POST": # and request.headers.get('request_type') == "search_instant":
+        # not working right now -- showing as 'None' but weirdly showing before POST request in terminal
+        # actual POST request in network tab show's request_type = search_instant
+        # print(f"request_type: ", request.headers.get('Request_type'))
         query = request.form.get("food-search")
         if query and len(query) >= 3:
             results = search_food(query)
@@ -47,18 +54,71 @@ def index():
         return render_template("index.html")
 
 
-@app.route("/add")
+@app.route("/add", methods=["GET", "POST"])
 @login_required
 def add():
-    query = request.args.get("add-food")
-    category = request.args.get("category")
-    if category == "common":
-        results = add_common_food(query)
-    elif category == "branded":
-        results = add_branded_food(query)
-    results_dict = results
-    results = json.dumps(results)
-    return render_template("add.html", results=results, results_dict=results_dict)
+    if request.method == "GET":
+        query = request.args.get("add-food")
+        category = request.args.get("category")
+        if category == "common":
+            results = add_common_food(query)
+        elif category == "branded":
+            results = add_branded_food(query)
+        if query and category:
+            results_dict = results
+            results = json.dumps(results)
+            return render_template("add.html", results=results, results_dict=results_dict)
+        return redirect("/")
+    else:
+        ...
+# def log() to actually log the food to meal from modal and save it to database and display it.
+# saving to DB and displaying might be two dif functs. log() in add route and display() in index route
+
+@app.route("/submit", methods=["POST"])
+@login_required
+def submit():
+    user_id = session["user_id"]
+    print(f"user_id: ", user_id)
+    date = dt.today().strftime('%Y-%m-%d')
+    print(f"date: ", date)
+    time = datetime.now().strftime('%H:%M:%S')
+    print(f"time: ", time)
+    meal_type = request.form.get("meal_type")
+    print(f"meal_type: ", meal_type)
+    a1 = request.form.get("a1")
+    print(f"a1: ", a1)
+    food_name = request.form.get("food_name")
+    print(f"food_name: ", food_name)
+    brand_name = request.form.get("brand_name")
+    print(f"brand_name: ", brand_name)
+    search_id = request.form.get("search_id")
+    print(f"search_id: ", search_id)
+    thumb = request.form.get("thumb")
+    print(f"thumb: ", thumb)
+    serving_qty = request.form.get("serving_qty")
+    print(f"serving_qty: ", serving_qty)
+    serving_weight_grams = request.form.get("serving_weight_grams")
+    print(f"serving_weight_grams: ", serving_weight_grams)
+    nf_calories = request.form.get("nf_calories")
+    print(f"nf_calories: ", nf_calories)
+    nf_total_fat = request.form.get("nf_total_fat")
+    print(f"nf_total_fat: ", nf_total_fat)
+    nf_saturated_fat = request.form.get("nf_saturated_fat")
+    print(f"nf_saturated_fat: ", nf_saturated_fat)
+    nf_cholesterol = request.form.get("nf_cholesterol")
+    print(f"nf_cholesterol: ", nf_cholesterol)
+    nf_sodium = request.form.get("nf_sodium")
+    print(f"nf_sodium: ", nf_sodium)
+    nf_total_carbohydrate = request.form.get("nf_total_carbohydrate")
+    print(f"nf_total_carbohydrate: ", nf_total_carbohydrate)
+    nf_dietary_fiber = request.form.get("nf_dietary_fiber")
+    print(f"nf_dietary_fiber: ", nf_dietary_fiber)
+    nf_sugars = request.form.get("nf_sugars")
+    print(f"nf_sugars: ", nf_sugars)
+    nf_protein = request.form.get("nf_protein")
+    print(f"nf_protein: ", nf_protein)
+
+    return redirect("/")
 
 
 @app.route("/login", methods=["GET", "POST"])

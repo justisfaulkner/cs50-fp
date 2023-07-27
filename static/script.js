@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (query.length >= 3) {
                     fetch('/', {
                         method: 'POST',
+                        headers: { 'request_type': 'search_instant' },
                         body: new URLSearchParams({ 'food-search': query })
                     })
                     .then(response => response.json())
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
           buttonItemContainer.setAttribute('class', 'item-container');
           buttonItemContainer.setAttribute('data-type', result.a1);
           buttonItemContainer.setAttribute('value', result.search_id);
+          buttonItemContainer.setAttribute('data-thumb', result.thumb);
           resultsContainer.appendChild(buttonItemContainer);
       
           const divItemThumbnail = document.createElement('div');
@@ -144,10 +146,16 @@ document.addEventListener('DOMContentLoaded', () => {
           button.addEventListener('click', () => {
             const query = button.value;
             const category = button.getAttribute("data-type")
+
+            // for add.html to get info into database
+            // setting items in local storage on index.html so I can access on add.html
+            localStorage.setItem('a1', button.getAttribute("data-type"));
+            localStorage.setItem('search_id', button.value);
+            localStorage.setItem('thumb', button.getAttribute("data-thumb"));
+
             switchWindow(query, category)
           })
         });
-        
     }
       
     function switchWindow(query, category) {
@@ -231,9 +239,127 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // jquery plugin to create an FDA-like nutrition label. 
-        // options var holds the sesttings for the plugin so added sugars can be toggled
+        // options var holds the settings for the plugin so added sugars can be toggled
         $('#nutritionLabel').nutritionLabel(options);
-        $('#nutritionLabel2').nutritionLabel(options);        
     }
     
+    const modalForm = document.getElementById('add-food-form')
+    // prevent user from hitting enter in the form
+    modalForm.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter'){
+            event.preventDefault();
+        }
+    });
+    // prevent user from submitting form without selecting a meal-type
+    modalForm.addEventListener('submit', function(event) {
+        const mealTypeButtons = document.querySelectorAll('.meal-type-btn');
+        const hasActiveButton = Array.from(mealTypeButtons).some((button) => button.classList.contains('active'));
+        
+        if (!hasActiveButton) {
+            document.getElementById('meal-alert').style.display = 'flex';
+            event.preventDefault();
+        }
+
+        modalForm.addEventListener('click', function(event) {
+            if (hasActiveButton) {
+                document.getElementById('meal-alert').style.display = 'flex';
+            }
+        });
+
+    });
+
+    // add event listner to add-food button for modal popup and put 1 in for serving qty value so it formats correctly 
+    const modalTrigger = document.getElementById('modal-trigger')
+    const modalInput = document.getElementById('modal-serving-qty');
+
+    const modalCalories = document.getElementById('nf_calories');
+    const modalTotalFat = document.getElementById('nf_total_fat');
+    const modalSatFat = document.getElementById('nf_saturated_fat');
+    const modalCholesterol = document.getElementById('nf_cholesterol');
+    const modalSodium = document.getElementById('nf_sodium');
+    const modalCarbs = document.getElementById('nf_total_carbohydrate');
+    const modalFiber = document.getElementById('nf_dietary_fiber');
+    const modalSugars = document.getElementById('nf_sugars');
+    const modalProtein = document.getElementById('nf_protein');
+    
+    const nfCalories = parseFloat(modalCalories.textContent, 10);
+    const nfTotalFat = parseFloat(modalTotalFat.textContent, 10);
+    const nfSatFat = parseFloat(modalSatFat.textContent, 10);
+    const nfCholesterol = parseFloat(modalCholesterol.textContent, 10);
+    const nfSodium = parseFloat(modalSodium.textContent, 10);
+    const nfCarbs = parseFloat(modalCarbs.textContent, 10);
+    const nfFiber = parseFloat(modalFiber.textContent, 10);
+    const nfSugars = parseFloat(modalSugars.textContent, 10);
+    const nfProtein = parseFloat(modalProtein.textContent, 10);
+
+    modalTrigger.addEventListener('click', function() {
+        const inputEvent = new Event('input', { bubbles: true});
+        modalInput.dispatchEvent(inputEvent)
+    })
+    modalInput.addEventListener('input', updateModal);
+
+
+    function updateModal() {
+        const nfQty = parseFloat(modalInput.value, 10);
+
+        if (!isNaN(nfQty)) {
+            const Calories = nfCalories * nfQty;
+            const TotalFat = nfTotalFat * nfQty;
+            const SatFat = nfSatFat * nfQty;
+            const Cholesterol = nfCholesterol * nfQty;
+            const Sodium = nfSodium * nfQty;
+            const Carbs = nfCarbs * nfQty;
+            const Fiber = nfFiber * nfQty;
+            const Sugars = nfSugars * nfQty;
+            const Protein = nfProtein * nfQty;
+            modalCalories.textContent = Calories.toFixed(0);
+            document.getElementById('form_calories').value = Calories.toFixed(0);
+            modalTotalFat.textContent = TotalFat.toFixed(1) + 'g';
+            document.getElementById('form_total_fat').value = TotalFat.toFixed(1);
+            modalSatFat.textContent = SatFat.toFixed(1) + 'g';
+            document.getElementById('form_saturated_fat').value = SatFat.toFixed(1);
+            modalCholesterol.textContent = Cholesterol.toFixed(0) + 'mg';
+            document.getElementById('form_cholesterol').value = Cholesterol.toFixed(0);
+            modalSodium.textContent = Sodium.toFixed(0) + 'mg';
+            document.getElementById('form_sodium').value = Sodium.toFixed(0);
+            modalCarbs.textContent = Carbs.toFixed(1) + 'g';
+            document.getElementById('form_total_carbohydrate').value = Carbs.toFixed(1);
+            modalFiber.textContent = Fiber.toFixed(1) + 'g';
+            document.getElementById('form_dietary_fiber').value = Fiber.toFixed(1);
+            modalSugars.textContent = Sugars.toFixed(1) + 'g';
+            document.getElementById('form_sugars').value = Sugars.toFixed(1);
+            modalProtein.textContent = Protein.toFixed(1) + 'g';
+            document.getElementById('form_protein').value = Protein.toFixed(1);
+        }
+        else {
+            modalCalories.textContent = "";
+            modalCalories.textContent = "";
+            modalTotalFat.textContent = "";
+            modalSatFat.textContent = "";
+            modalCholesterol.textContent = "";
+            modalSodium.textContent = "";
+            modalCarbs.textContent = "";
+            modalFiber.textContent = "";
+            modalSugars.textContent = "";
+            modalProtein.textContent = "";
+        }
+    }
+
+    // for add.html to get info into database
+    const mealTypeButtons = document.querySelectorAll('.meal-type-btn')
+    console.log(mealTypeButtons)
+    mealTypeButtons.forEach((button) =>{
+        button.addEventListener('click', () => {
+            mealTypeButtons.forEach((btn) => {
+                btn.classList.remove('active');
+            })
+            button.classList.add('active');
+            document.getElementById('meal_type').value = button.value;
+            document.getElementById('meal-alert').style.display = 'none';
+        });
+    });
+    document.getElementById('a1').value = localStorage.getItem('a1');
+    document.getElementById('search_id').value = localStorage.getItem('search_id');
+    document.getElementById('thumb').value = localStorage.getItem('thumb');
+
 });

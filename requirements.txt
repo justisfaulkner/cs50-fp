@@ -1,0 +1,78 @@
+notes for now:
+
+DB food:
+unique_id primary key
+user_id foreign key
+date
+time
+meal_type (breakfast, lunch, dinner, snack)
+a1
+food_name
+brand_name
+search_id
+thumb
+hi_res (?)
+serving_qty
+serving_unit
+serving_weight_grams
+nf_calories
+nf_total_fat
+nf_saturated_fat
+nf_cholesterol
+nf_sodium
+nf_total_carbohydrate
+nf_dietary_fiber
+nf_sugars
+nf_protein
+alt_measures
+    I think these should go under serving_unit
+    figure out what these will be called
+        what comes with the food in nutrion_ix
+        and add some universal common ones
+            grams
+            ounces
+            cups (?)
+            pounds (?)
+
+
+CREATE TABLE food (
+    unique_id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    date TEXT,
+    time TEXT,
+    meal_type TEXT,
+    a1 TEXT,
+    food_name TEXT,
+    brand_name TEXT,
+    search_id TEXT,
+    thumb TEXT,
+    hi_res TEXT,
+    serving_qty REAL,
+    serving_unit TEXT,
+    serving_weight_grams REAL,
+    nf_calories REAL,
+    nf_total_fat REAL,
+    nf_saturated_fat REAL,
+    nf_cholesterol REAL,
+    nf_sodium REAL,
+    nf_total_carbohydrate REAL,
+    nf_dietary_fiber REAL,
+    nf_sugars REAL,
+    nf_protein REAL
+);
+
+
+
+DB account:
+unique_id primary key
+user_id foreign key
+weight_goal (gain, lose, maintain)
+goal_per_week (0.5lbs, 1lbs, 1.5lbs 2lbs, etc)
+protein_goal
+carb_goal
+fat_goal
+bmr
+weight
+
+DB excersice:
+
