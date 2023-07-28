@@ -6,23 +6,67 @@ Home
 
 {% block main %}
 
-<h4>JTrack Food Search</h4>
-<div class="input-results-container">
-    <div class="input-results-wrapper">
-        <form id="search-form" method="post" action="/">
-            <div>
-                <input autocomplete="off" autofocus class="form-control input-form" type="text" id="food-search" name="food-search" placeholder="Search for a food">
-            </div>
-        </form>
-        <div class="results-wrapper" id="results-wrapper">
-            <div class="filter-buttons-container" id="filter-buttons-container">
-                <button class="btn btn-primary filter-btn" id="filter" data-type="all">All</button>
-                <button class="btn btn-primary filter-btn" id="filter" data-type="common">Common</button>
-                <button class="btn btn-primary filter-btn" id="filter" data-type="branded">Branded</button>
-            </div>
-            <div id="results-container">
+<div class="date-container">
+    <button class="btn btn-primary btn-date" id="prev-day-btn">&lt;</button>
+    <div class="current-day" id="current-day" data-vis=""></div>
+    <button class="btn btn-primary btn-date" id="next-day-btn">&gt;</button>
+    <button class="btn btn-primary btn-date" id="current-day-btn">Today</button>
+</div>
 
-            </div>
+<div class="summary-container">
+    budget || food cals || excersice cals(negative) || net || over/under
+    
+</div>
+
+<br>
+
+<div class="log-container">
+    <div class="meal-container" id="meal-breakfast">
+        <div class="meal-heading">Breakfast: !!need total meals cals -- can pass in from python/flask!!</div>
+        <div class="meal-log-container">
+            {% if breakfast is not none %}
+                {% for food in breakfast %}
+                    <div class="food-item" data-vis="{{ food.date }}">{{ food.date }} || {{ food.food_name }} || {{ food.serving_qty }} || {{ food.nf_calories }} || !!need delete button!!</div>
+                {% endfor %}
+            {% else %}
+                <div>No food logged</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="meal-container" id="meal-lunch">
+        <div class="meal-heading">Lunch: !!need total meals cals -- can pass in from python/flask!!</div>
+        <div class="meal-log-container">
+            {% if lunch is not none %}
+                {% for food in lunch %}
+                    <div class="food-item" data-vis="{{ food.date }}">{{ food.date }} || {{ food.food_name }} || {{ food.serving_qty }} || {{ food.nf_calories }} || !!need delete button!!</div>
+                {% endfor %}
+            {% else %}
+                <div>No food logged</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="meal-container" id="meal-dinner">
+        <div class="meal-heading">Dinner: !!need total meals cals -- can pass in from python/flask!!</div>
+        <div class="meal-log-container">
+            {% if dinner is not none %}
+                {% for food in dinner %}
+                    <div class="food-item" data-vis="{{ food.date }}">{{ food.date }} || {{ food.food_name }} || {{ food.serving_qty }} || {{ food.nf_calories }} || !!need delete button!!</div>
+                {% endfor %}
+            {% else %}
+                <div>No food logged</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="meal-container" id="meal-snack">
+        <div class="meal-heading">Snack: !!need total meals cals -- can pass in from python/flask!!</div>
+        <div class="meal-log-container">
+            {% if snack is not none %}
+                {% for food in snack %}
+                    <div class="food-item" data-vis="{{ food.date }}">{{ food.date }} || {{ food.food_name }} || {{ food.serving_qty }} || {{ food.nf_calories }} || !!need delete button!!</div>
+                {% endfor %}
+            {% else %}
+                <div>No food logged</div>
+            {% endif %}
         </div>
     </div>
 </div>

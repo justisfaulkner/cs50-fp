@@ -7,11 +7,107 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterButtons = document.querySelectorAll('#filter');
     const resultsWrapper = document.getElementById('results-wrapper')
 
-    let timerId;
+    if (currentPath === '/index.html' || currentPath === '/') {
+        // intialize document elements relating to current day div/previous day btn/next day btn/today btn
+        const prevDayBtn = document.getElementById("prev-day-btn");
+        const nextDayBtn = document.getElementById("next-day-btn");
+        const currentDayDiv = document.getElementById("current-day");
+        const currentDayBtn = document.getElementById("current-day-btn");
 
+        // initialize the current date
+        const today = new Date();
+        updateCurrentDay(today);
+
+        // format date to Day, Month Year
+        function formatDate(date) {
+            const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+            const formattedDate = date.toLocaleDateString('en-US', options);
+            // split the formatted date into components
+            const parts = formattedDate.split(', ');
+            // join the components back together without the comma
+            return parts[0] + ' ' + parts[1] + ', ' + parts[2];
+        }
+
+        // format date to YYYY-MM-DD
+        function formatDateValue(date) {
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            const formattedDate = date.toLocaleDateString('en-US', options);
+            const [month, day, year] = formattedDate.split('/');
+            return `${year}-${month}-${day}`;
+        }    
+
+        // function to display current day
+        function updateCurrentDay (date) {
+            currentDayDiv.textContent = formatDate(date);
+            currentDayDiv.dataset.vis = formatDateValue(date);
+        }
+
+        // function to handle previous day button click
+        prevDayBtn.addEventListener('click', () => {
+            const currentDay = new Date(currentDayDiv.textContent);
+            const previousDay = new Date(currentDay);
+            previousDay.setDate(currentDay.getDate() - 1);
+            updateCurrentDay(previousDay);
+        });
+    
+        // function to handle next day button click
+        nextDayBtn.addEventListener('click', () => {
+            const currentDay = new Date(currentDayDiv.textContent);
+            const nextDay = new Date(currentDay);
+            nextDay.setDate(currentDay.getDate() + 1);
+            updateCurrentDay(nextDay);
+        });
+
+        // function to handle current day button click
+        currentDayBtn.addEventListener('click', () => {
+            const today = new Date();
+            updateCurrentDay(today)
+        });
+
+        // Function to handle changes to the data-vis attribute
+        function handleCurrentDayChange(mutationsList) {
+        for (const mutation of mutationsList) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'data-vis') {
+            const newValue = mutation.target.getAttribute('data-vis');
+            
+            //function to show/hide food results based on date
+            const foodItems = document.querySelectorAll('.food-item')
+            let allHidden = true;
+            foodItems.forEach((item) => {
+                const foodItemDate = item.getAttribute('data-vis')
+                const selectedDayDate = newValue
+                if (foodItemDate === selectedDayDate) {
+                    item.style.display = "flex"
+                }
+                else {
+                    item.style.display = "none"
+                }
+            });
+            }
+        }
+        }
+    
+        // Create a new MutationObserver
+        const observer = new MutationObserver(handleCurrentDayChange);
+
+        // Start observing changes to the data-vis attribute of the currentDayDiv
+        observer.observe(currentDayDiv, { attributes: true });
+
+        // when index loads "click" today button so show/hide food code is triggered
+        // dom content loaded already at top enclosing everything
+        const CurrentDayBtnClickEvent = new Event('click', { bubbles: true});
+        currentDayBtn.dispatchEvent(CurrentDayBtnClickEvent)
+    }
+    
+    // function to disallow submission on search instant form (it autoupdates, submission would results in plaintext JSON)
     searchForm.addEventListener("submit", function(event) {
         event.preventDefault();
     });
+
+    // function to implement search instant and autodisplay results
+    // TO DO: need to figure out how to allow this on every page
+
+    let timerId;
 
     if (currentPath === '/index.html' || currentPath === '/') {
         searchInput.addEventListener('input', () => {
@@ -165,7 +261,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (currentURL.includes("/add?add-food=")) {
         const flaskResults = document.getElementById("APIresults").getAttribute("data-api-results")
+        console.log(flaskResults)
         const jsResults = JSON.parse(flaskResults)
+        console.log(jsResults)
 
         const keys = Object.keys(jsResults);
         keys.forEach(key => {
@@ -250,6 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
         }
     });
+
     // prevent user from submitting form without selecting a meal-type
     modalForm.addEventListener('submit', function(event) {
         const mealTypeButtons = document.querySelectorAll('.meal-type-btn');
@@ -296,6 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const inputEvent = new Event('input', { bubbles: true});
         modalInput.dispatchEvent(inputEvent)
     })
+    
     modalInput.addEventListener('input', updateModal);
 
 
