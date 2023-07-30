@@ -131,6 +131,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     summaryNetCals.textContent = netCals;
                     summaryOverUnder.textContent = overUnder;
                     
+                    // dynamically display over or under based on result
+                    const overUnderHeader = document.getElementById('over-under-header')
+                    if (overUnder > 0) {
+                        overUnderHeader.textContent = "Under"
+                        summaryOverUnder.style.backgroundColor = "#198754"
+                    } else {
+                        overUnderHeader.textContent = "Over"
+                        summaryOverUnder.style.backgroundColor = "#dc3545"
+                    }
+                    
                     
                     });
                     }

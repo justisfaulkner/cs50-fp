@@ -284,7 +284,6 @@ h1 {
     display: flex;
     justify-content: center; /* Horizontally center the .tracker-container */
     align-items: center; /* Vertically center the .tracker-container */
-    height: 100vh; /* Set the height to 100% of the viewport height */
   }
 
 .tracker-container {
@@ -328,6 +327,13 @@ h1 {
 
 .summary-header {
     font-weight: bold;
+}
+
+#over-under {
+    border-radius: 5px;
+    color: #fff;
+    padding-right: 4px;
+    padding-left: 4px;
 }
 
 .meal-container {
