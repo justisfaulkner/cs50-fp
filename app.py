@@ -163,6 +163,15 @@ def submit():
 
     return redirect("/")
 
+@app.route("/delete", methods=["POST"])
+@login_required
+def delete():
+    user_id = session["user_id"]
+    unique_id = request.form.get("unique_id")
+    # print(f"unique ID: ", unique_id)
+    db.execute("DELETE FROM food WHERE user_id = ? AND unique_id = ?", user_id, unique_id)
+    return redirect("/")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

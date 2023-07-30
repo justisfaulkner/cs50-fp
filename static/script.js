@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             item.style.display = "none"
                         }
                     });
-
+        
                     updateNoFoodLoggedMessage();
 
                     // calculate and display calories for meal headings
@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 sCals += parseInt(item.getAttribute("data-cals"));
                             }
                         }
+                    });
                     breakfastCals.textContent = "Breakfast: " + bCals + " cals";
                     lunchCals.textContent = "Lunch: " + lCals + " cals";
                     dinnerCals.textContent = "Dinner: " + dCals + " cals";
@@ -140,10 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         overUnderHeader.textContent = "Over"
                         summaryOverUnder.style.backgroundColor = "#dc3545"
                     }
-                    
-                    
-                    });
-                    }
+                }
             }
         }
 
@@ -222,6 +220,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // function for deleting a food from log
+        const finalDeletes = document.querySelectorAll('.btn.btn-danger.final-delete')
+        finalDeletes.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-id');
+                fetch('/delete', {
+                    method: 'POST',
+                    body: new URLSearchParams({ 'unique_id': id })
+                })
+                const uniqueFoodItemContainer = document.querySelector('.food-item-container[data-id="' + id + '"]');
+                uniqueFoodItemContainer.setAttribute('data-vis', "deleted")
+                uniqueFoodItemContainer.style.display = 'none';
+
+                const changeDay = new Event('click', { bubbles: true});
+                prevDayBtn.dispatchEvent(changeDay)
+                nextDayBtn.dispatchEvent(changeDay)
+                
+            });
+        });
+
         // when index loads "click" today button so show/hide food code is triggered
         // dom content loaded already at top enclosing everything
         const CurrentDayBtnClickEvent = new Event('click', { bubbles: true});
@@ -250,31 +268,27 @@ document.addEventListener('DOMContentLoaded', () => {
  
 
     // function to implement search instant and autodisplay results
-    // TO DO: need to figure out how to allow this on every page
     let timerId;
-
-    if (currentPath === '/index.html' || currentPath === '/') {
-        searchInput.addEventListener('input', () => {
-            clearTimeout(timerId)
-            timerId = setTimeout(() => {
-                const query = searchInput.value;
-                if (query.length >= 3) {
-                    fetch('/', {
-                        method: 'POST',
-                        headers: { 'request_type': 'search_instant' },
-                        body: new URLSearchParams({ 'food-search': query })
-                    })
-                    .then(response => response.json())
-                    .then(results => {
-                        displaySearch(results);
-                        addFood();
-                    });
-                } else {
-                    clearResults();
-                }
-            }, 300);
-        });
-    }
+    searchInput.addEventListener('input', () => {
+        clearTimeout(timerId)
+        timerId = setTimeout(() => {
+            const query = searchInput.value;
+            if (query.length >= 3) {
+                fetch('/', {
+                    method: 'POST',
+                    headers: { 'request_type': 'search_instant' },
+                    body: new URLSearchParams({ 'food-search': query })
+                })
+                .then(response => response.json())
+                .then(results => {
+                    displaySearch(results);
+                    addFood();
+                });
+            } else {
+                clearResults();
+            }
+        }, 300);
+    });
 
     function displaySearch(results) {
         clearResults();
