@@ -295,30 +295,38 @@ h1 {
 }
 
 .meal-log-container {
-    min-height: 50px;
+    min-height: 70px;
     position: relative;
 }
 
 .food-item-container {
     display: flex;
     justify-content: space-between;
-    padding: 20px;
+    padding-top: 6px;
     position: relative;
 }
   
 .food-item {
     align-items: left;
     margin-left: 10px;
-    /* padding: 15px; */
 }
   
 .delete-btn {
-    background-color: #e1e1e1;
+    background-color: #0d6efd;
     border: none;
-    border-radius: 100%;
+    border-radius: 10%;
     font-size: small;
-    max-height: 25px;
     margin-right: 10px;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background-color: #e31b2b;
+    border: none;
+    border-radius: 10%;
+    font-size: small;
+    margin-right: 10px;
+    color: #fff;
 }
 
 .no-log {
@@ -330,4 +338,9 @@ h1 {
     position: absolute;
     top: 0;
     left: 0;
+}
+
+.confirm-delete-food {
+    color: #0d6efd;
+    font-weight: bold;
 }

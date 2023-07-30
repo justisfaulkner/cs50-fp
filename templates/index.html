@@ -26,9 +26,31 @@ Home
         <div class="meal-log-container">
             {% if breakfast is not none %}
                 {% for food in breakfast %}
-                <div class="food-item-container">
-                    <div class="food-item" data-meal="{{ food.meal_type }}" data-cals="{{ food.nf_calories }}" data-vis="{{ food.date }}">{{ food.food_name }} || {{ food.serving_qty }} || {{ food.nf_calories }}</div>
-                    <button class="delete-btn" data-id="{{ food.unique_id }}" data-vis="{{ food.date }}">✖</button>
+                <div class="food-item-container" data-meal="{{ food.meal_type }}" data-vis="{{ food.date }}" data-cals="{{ food.nf_calories }}">
+                    <div class="food-item">{{ food.food_name }} || {{ food.serving_qty }} || {{ food.nf_calories }}</div>
+                    
+                    <!-- Modal Trigger -->
+                    <button type="button" class="delete-btn" data-id="{{ food.unique_id }}" data-vis="{{ food.date }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ food.unique_id }}">✖</button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop-{{ food.unique_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel-{{ food.unique_id }}">Confirm Delete</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                Are you sure you'd like to delete <span class="confirm-delete-food">'{{ food.food_name }}'</span> from your food log?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 {% endfor %}
                 <div class="no-log" id="no-breakfast-logged">No food logged for breakfast</div>
@@ -42,9 +64,31 @@ Home
         <div class="meal-log-container">
             {% if lunch is not none %}
                 {% for food in lunch %}
-                <div class="food-item-container">
-                    <div class="food-item" data-meal="{{ food.meal_type }}" data-cals="{{ food.nf_calories }}" data-vis="{{ food.date }}">{{ food.food_name }} || {{ food.serving_qty }} || {{ food.nf_calories }}</div>
-                    <button class="delete-btn" data-id="{{ food.unique_id }}" data-vis="{{ food.date }}">✖</button>
+                <div class="food-item-container" data-meal="{{ food.meal_type }}" data-vis="{{ food.date }}" data-cals="{{ food.nf_calories }}">
+                    <div class="food-item">{{ food.food_name }} || {{ food.serving_qty }} || {{ food.nf_calories }}</div>
+                    
+                    <!-- Modal Trigger -->
+                    <button type="button" class="delete-btn" data-id="{{ food.unique_id }}" data-vis="{{ food.date }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ food.unique_id }}">✖</button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop-{{ food.unique_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel-{{ food.unique_id }}">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                ...
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Understood</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 {% endfor %}
                 <div class="no-log" id="no-lunch-logged">No food logged for lunch</div>
@@ -58,9 +102,31 @@ Home
         <div class="meal-log-container">
             {% if dinner is not none %}
                 {% for food in dinner %}
-                <div class="food-item-container">
-                    <div class="food-item" data-meal="{{ food.meal_type }}" data-cals="{{ food.nf_calories }}" data-vis="{{ food.date }}">{{ food.food_name }} || {{ food.serving_qty }} || {{ food.nf_calories }}</div>
-                    <button class="delete-btn" data-id="{{ food.unique_id }}" data-vis="{{ food.date }}">✖</button>
+                <div class="food-item-container" data-meal="{{ food.meal_type }}" data-vis="{{ food.date }}" data-cals="{{ food.nf_calories }}">
+                    <div class="food-item">{{ food.food_name }} || {{ food.serving_qty }} || {{ food.nf_calories }}</div>
+                    
+                    <!-- Modal Trigger -->
+                    <button type="button" class="delete-btn" data-id="{{ food.unique_id }}" data-vis="{{ food.date }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ food.unique_id }}">✖</button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop-{{ food.unique_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel-{{ food.unique_id }}">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                ...
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Understood</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 {% endfor %}
                 <div class="no-log" id="no-dinner-logged">No food logged for dinner</div>
@@ -74,9 +140,31 @@ Home
         <div class="meal-log-container">
             {% if snack is not none %}
                 {% for food in snack %}
-                <div class="food-item-container">
-                    <div class="food-item" data-meal="{{ food.meal_type }}" data-cals="{{ food.nf_calories }}" data-vis="{{ food.date }}">{{ food.food_name }} || {{ food.serving_qty }} || {{ food.nf_calories }}</div>
-                    <button class="delete-btn" data-id="{{ food.unique_id }}" data-vis="{{ food.date }}">✖</button>
+                <div class="food-item-container" data-meal="{{ food.meal_type }}" data-vis="{{ food.date }}" data-cals="{{ food.nf_calories }}">
+                    <div class="food-item">{{ food.food_name }} || {{ food.serving_qty }} || {{ food.nf_calories }}</div>
+                    
+                    <!-- Modal Trigger -->
+                    <button type="button" class="delete-btn" data-id="{{ food.unique_id }}" data-vis="{{ food.date }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ food.unique_id }}">✖</button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop-{{ food.unique_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel-{{ food.unique_id }}">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                ...
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Understood</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 {% endfor %}
                 <div class="no-log" id="no-snack-logged">No food logged for snacks</div>

@@ -71,25 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     const newValue = mutation.target.getAttribute('data-vis');
                 
                     //function to show/hide food results based on date
-                    const foodItems = document.querySelectorAll('.food-item')
-                    foodItems.forEach((item) => {
+                    const foodItemContainers = document.querySelectorAll('.food-item-container')
+                    foodItemContainers.forEach((item) => {
                         const foodItemDate = item.getAttribute('data-vis')
                         const selectedDayDate = newValue
                         if (foodItemDate === selectedDayDate) {
-                            item.style.display = "block"
-                        }
-                        else {
-                            item.style.display = "none"
-                        }
-                    });
-
-                    //function to show/hide corresponding delete button based on date
-                    const deleteBtn = document.querySelectorAll('.delete-btn')
-                    deleteBtn.forEach((item) => {
-                        const deleteBtnDate = item.getAttribute('data-vis')
-                        const selectedDayDate = newValue
-                        if (deleteBtnDate === selectedDayDate) {
-                            item.style.display = "block"
+                            item.style.display = "flex"
                         }
                         else {
                             item.style.display = "none"
@@ -107,8 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     let dCals = 0;
                     const snackCals = document.getElementById("meal-heading-snack");
                     let sCals = 0;
-                    foodItems.forEach((item) => {
-                        if (item.style.display === "block") {
+                    foodItemContainers.forEach((item) => {
+                        if (item.style.display === "flex") {
                             if (item.getAttribute("data-meal") === "breakfast") {
                                 bCals += parseInt(item.getAttribute("data-cals"));
                             }
@@ -140,9 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //functions to see if any specified meal items are logged on selected day
         function breakfastVisible() {
-            const breakfastItems = document.querySelectorAll('.food-item[data-meal="breakfast"]');
+            const breakfastItems = document.querySelectorAll('.food-item-container[data-meal="breakfast"]');
             for (const item of breakfastItems) {
-                if (item.style.display === "block") {
+                if (item.style.display === "flex") {
                     return true;
                 }
             }
@@ -150,9 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function lunchVisible() {
-            const lunchItems = document.querySelectorAll('.food-item[data-meal="lunch"]');
+            const lunchItems = document.querySelectorAll('.food-item-container[data-meal="lunch"]');
             for (const item of lunchItems) {
-                if (item.style.display === "block") {
+                if (item.style.display === "flex") {
                     return true;
                 }
             }
@@ -160,9 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function dinnerVisible() {
-            const dinnerItems = document.querySelectorAll('.food-item[data-meal="dinner"]');
+            const dinnerItems = document.querySelectorAll('.food-item-container[data-meal="dinner"]');
             for (const item of dinnerItems) {
-                if (item.style.display === "block") {
+                if (item.style.display === "flex") {
                     return true;
                 }
             }
@@ -170,9 +157,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function snackVisible() {
-            const snackItems = document.querySelectorAll('.food-item[data-meal="snack"]');
+            const snackItems = document.querySelectorAll('.food-item-container[data-meal="snack"]');
             for (const item of snackItems) {
-                if (item.style.display === "block") {
+                if (item.style.display === "flex") {
                     return true;
                 }
             }
