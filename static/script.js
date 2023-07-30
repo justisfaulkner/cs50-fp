@@ -66,26 +66,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Function to handle changes to the data-vis attribute
         function handleCurrentDayChange(mutationsList) {
-        for (const mutation of mutationsList) {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'data-vis') {
-            const newValue = mutation.target.getAttribute('data-vis');
-            
-            //function to show/hide food results based on date
-            const foodItems = document.querySelectorAll('.food-item')
-            let allHidden = true;
-            foodItems.forEach((item) => {
-                const foodItemDate = item.getAttribute('data-vis')
-                const selectedDayDate = newValue
-                if (foodItemDate === selectedDayDate) {
-                    item.style.display = "flex"
-                }
-                else {
-                    item.style.display = "none"
-                }
-            });
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-vis') {
+                    const newValue = mutation.target.getAttribute('data-vis');
+                
+                    //function to show/hide food results based on date
+                    const foodItems = document.querySelectorAll('.food-item')
+                    foodItems.forEach((item) => {
+                        const foodItemDate = item.getAttribute('data-vis')
+                        const selectedDayDate = newValue
+                        if (foodItemDate === selectedDayDate) {
+                            item.style.display = "block"
+                        }
+                        else {
+                            item.style.display = "none"
+                        }
+                    });
+
+                    //function to show/hide corresponding delete button based on date
+                    const deleteBtn = document.querySelectorAll('.delete-btn')
+                    deleteBtn.forEach((item) => {
+                        const deleteBtnDate = item.getAttribute('data-vis')
+                        const selectedDayDate = newValue
+                        if (deleteBtnDate === selectedDayDate) {
+                            item.style.display = "block"
+                        }
+                        else {
+                            item.style.display = "none"
+                        }
+                    });
+
+                    updateNoFoodLoggedMessage();
+
+                    // add and display total calories for each meal in the meal heading
+                    const breakfastCals = document.getElementById("meal-heading-breakfast");
+                    let bCals = 0;
+                    const lunchCals = document.getElementById("meal-heading-lunch");
+                    let lCals = 0;
+                    const dinnerCals = document.getElementById("meal-heading-dinner");
+                    let dCals = 0;
+                    const snackCals = document.getElementById("meal-heading-snack");
+                    let sCals = 0;
+                    foodItems.forEach((item) => {
+                        if (item.style.display === "block") {
+                            if (item.getAttribute("data-meal") === "breakfast") {
+                                bCals += parseInt(item.getAttribute("data-cals"));
+                            }
+                            else if (item.getAttribute("data-meal") === "lunch") {
+                                lCals += parseInt(item.getAttribute("data-cals"));
+                            }
+                            else if (item.getAttribute("data-meal") === "dinner") {
+                                dCals += parseInt(item.getAttribute("data-cals"));
+                            }
+                            else if (item.getAttribute("data-meal") === "snack") {
+                                sCals += parseInt(item.getAttribute("data-cals"));
+                            }
+                        }
+                    breakfastCals.textContent = "Breakfast: " + bCals + " cals";
+                    lunchCals.textContent = "Lunch: " + lCals + " cals";
+                    dinnerCals.textContent = "Dinner: " + dCals + " cals";
+                    snackCals.textContent = "Snack: " + sCals + " cals";
+                    });
+                    }
             }
         }
-        }
+
     
         // Create a new MutationObserver
         const observer = new MutationObserver(handleCurrentDayChange);
@@ -93,12 +138,80 @@ document.addEventListener('DOMContentLoaded', () => {
         // Start observing changes to the data-vis attribute of the currentDayDiv
         observer.observe(currentDayDiv, { attributes: true });
 
+        //functions to see if any specified meal items are logged on selected day
+        function breakfastVisible() {
+            const breakfastItems = document.querySelectorAll('.food-item[data-meal="breakfast"]');
+            for (const item of breakfastItems) {
+                if (item.style.display === "block") {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function lunchVisible() {
+            const lunchItems = document.querySelectorAll('.food-item[data-meal="lunch"]');
+            for (const item of lunchItems) {
+                if (item.style.display === "block") {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function dinnerVisible() {
+            const dinnerItems = document.querySelectorAll('.food-item[data-meal="dinner"]');
+            for (const item of dinnerItems) {
+                if (item.style.display === "block") {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function snackVisible() {
+            const snackItems = document.querySelectorAll('.food-item[data-meal="snack"]');
+            for (const item of snackItems) {
+                if (item.style.display === "block") {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function updateNoFoodLoggedMessage() {
+            const noBreakfastLogged = document.getElementById("no-breakfast-logged")
+            const noLunchLogged = document.getElementById("no-lunch-logged")
+            const noDinnerLogged = document.getElementById("no-dinner-logged")
+            const noSnackLogged = document.getElementById("no-snack-logged")
+            if (breakfastVisible()) {
+                noBreakfastLogged.style.display = "none";
+            } else {
+                noBreakfastLogged.style.display = "block";
+            }
+            if (lunchVisible()) {
+                noLunchLogged.style.display = "none";
+            } else {
+                noLunchLogged.style.display = "block";
+            }
+            if (dinnerVisible()) {
+                noDinnerLogged.style.display = "none";
+            } else {
+                noDinnerLogged.style.display = "block";
+            }
+            if (snackVisible()) {
+                noSnackLogged.style.display = "none";
+            } else {
+                noSnackLogged.style.display = "block";
+            }
+        }
+
         // when index loads "click" today button so show/hide food code is triggered
         // dom content loaded already at top enclosing everything
         const CurrentDayBtnClickEvent = new Event('click', { bubbles: true});
         currentDayBtn.dispatchEvent(CurrentDayBtnClickEvent)
     }
-    
+
     // function to disallow submission on search instant form (it autoupdates, submission would results in plaintext JSON)
     searchForm.addEventListener("submit", function(event) {
         event.preventDefault();
@@ -261,9 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (currentURL.includes("/add?add-food=")) {
         const flaskResults = document.getElementById("APIresults").getAttribute("data-api-results")
-        console.log(flaskResults)
         const jsResults = JSON.parse(flaskResults)
-        console.log(jsResults)
 
         const keys = Object.keys(jsResults);
         keys.forEach(key => {
@@ -358,13 +469,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('meal-alert').style.display = 'flex';
             event.preventDefault();
         }
-
-        modalForm.addEventListener('click', function(event) {
-            if (hasActiveButton) {
-                document.getElementById('meal-alert').style.display = 'flex';
-            }
-        });
-
     });
 
     // add event listner to add-food button for modal popup and put 1 in for serving qty value so it formats correctly 
@@ -447,7 +551,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // for add.html to get info into database
     const mealTypeButtons = document.querySelectorAll('.meal-type-btn')
-    console.log(mealTypeButtons)
     mealTypeButtons.forEach((button) =>{
         button.addEventListener('click', () => {
             mealTypeButtons.forEach((btn) => {
@@ -455,6 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             button.classList.add('active');
             document.getElementById('meal_type').value = button.value;
+            // used to remove the meal-alert
             document.getElementById('meal-alert').style.display = 'none';
         });
     });

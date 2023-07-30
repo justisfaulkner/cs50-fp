@@ -279,3 +279,55 @@ h1 {
     margin-bottom: 10px;
     margin-top: -5px;
 }
+
+.meal-container {
+    border: 1px solid #CED4DA;
+    border-radius: 4px;
+    display: block;
+    width: 50%;
+}
+
+.meal-heading {
+    background-color: #e1e1e1;
+    text-align: left;
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+.meal-log-container {
+    min-height: 50px;
+    position: relative;
+}
+
+.food-item-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    position: relative;
+}
+  
+.food-item {
+    align-items: left;
+    margin-left: 10px;
+    /* padding: 15px; */
+}
+  
+.delete-btn {
+    background-color: #e1e1e1;
+    border: none;
+    border-radius: 100%;
+    font-size: small;
+    max-height: 25px;
+    margin-right: 10px;
+}
+
+.no-log {
+    color: #bbbbbb;
+    font-style: italic;
+    text-align: left;
+    margin-left: 25px;
+    margin-top: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
