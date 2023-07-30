@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     updateNoFoodLoggedMessage();
 
-                    // add and display total calories for each meal in the meal heading
+                    // calculate and display calories for meal headings
                     const breakfastCals = document.getElementById("meal-heading-breakfast");
                     let bCals = 0;
                     const lunchCals = document.getElementById("meal-heading-lunch");
@@ -113,6 +113,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     lunchCals.textContent = "Lunch: " + lCals + " cals";
                     dinnerCals.textContent = "Dinner: " + dCals + " cals";
                     snackCals.textContent = "Snack: " + sCals + " cals";
+                    
+                    // calculate and display calories for summary section 
+                    const summaryBudgetCals = document.getElementById('budget-cals');
+                    const summaryFoodCals = document.getElementById('total-food-cals');
+                    const summaryActiveCals = document.getElementById('total-active-cals');
+                    const summaryNetCals = document.getElementById('net-cals');
+                    const summaryOverUnder = document.getElementById('over-under');
+
+                    const budgetCals = parseInt(summaryBudgetCals.textContent);
+                    const foodCals = bCals + lCals + dCals + sCals;
+                    const activeCals = parseInt(summaryActiveCals.textContent);
+                    const netCals = foodCals + activeCals;
+                    const overUnder = budgetCals - netCals;
+
+                    summaryFoodCals.textContent = foodCals;
+                    summaryNetCals.textContent = netCals;
+                    summaryOverUnder.textContent = overUnder;
+                    
+                    
                     });
                     }
             }
@@ -204,9 +223,24 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
     });
 
+    // add active class to log-delete-btns when clicked
+    const logDeleteBtns = document.querySelectorAll(".btn.btn-danger.delete-btn")
+    logDeleteBtns.forEach(btn => {
+        btn.addEventListener("click", function() {
+            btn.classList.toggle("active");
+        });
+    });
+
+    // remove active class from log-delete-btns when clicked away (called in window.addeventlistener(mousedown))
+    function removeActiveFromLogDeleteBtns () {
+        logDeleteBtns.forEach(btn => {
+            btn.classList.remove("active")
+        });
+    }
+ 
+
     // function to implement search instant and autodisplay results
     // TO DO: need to figure out how to allow this on every page
-
     let timerId;
 
     if (currentPath === '/index.html' || currentPath === '/') {
@@ -311,6 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Listen for click events on the window
       window.addEventListener('mousedown', hideResultsWrapper);
+      window.addEventListener('mousedown', removeActiveFromLogDeleteBtns)
       
       // Listen for focus event on the search input
       searchInput.addEventListener('focus', showResultsWrapper);

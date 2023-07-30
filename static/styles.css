@@ -22,9 +22,9 @@ h1 {
 }
 
 .results-wrapper {
-    border-right: 1px solid #CED4DA;
-    border-left: 1px solid #CED4DA;
-    border-bottom: 1px solid #CED4DA;
+    border-right: 1px solid #c2d5eb;
+    border-left: 1px solid #c2d5eb;
+    border-bottom: 1px solid #c2d5eb;
     border-radius: 2px;
     display: none;
     /* display: block; -- on show (with JS) */
@@ -72,7 +72,7 @@ h1 {
     padding: 5px;
     background-color: white;
     border: 0px solid white;
-    border-bottom: 1px solid #e1e1e1;
+    border-bottom: 1px solid #e4eaf4;
     display: block;
     width: 100%;
 }
@@ -280,15 +280,65 @@ h1 {
     margin-top: -5px;
 }
 
-.meal-container {
-    border: 1px solid #CED4DA;
-    border-radius: 4px;
-    display: block;
+.tracker-wrapper {
+    display: flex;
+    justify-content: center; /* Horizontally center the .tracker-container */
+    align-items: center; /* Vertically center the .tracker-container */
+    height: 100vh; /* Set the height to 100% of the viewport height */
+  }
+
+.tracker-container {
+    flex-direction: row;
     width: 50%;
 }
 
+.date-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.current-day {
+    min-width: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+.btn-date {
+    margin: 5px;
+}
+
+.summary-container {
+    display: flex;
+    /* margin-bottom: 15px; */
+    margin-top: 5px;
+    background-color: #e4eaf4;
+    border-right: 1px solid #c2d5eb;
+    border-left: 1px solid #c2d5eb;
+    border-top: 1px solid #c2d5eb;
+    border-radius: 4px;
+    justify-content: space-between;
+    padding-bottom: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.summary-header {
+    font-weight: bold;
+}
+
+.meal-container {
+    border: 1px solid #c2d5eb;
+    border-radius: 4px;
+    display: block;
+    /* width: 50%; */
+}
+
 .meal-heading {
-    background-color: #e1e1e1;
+    background-color: #e4eaf4;
     text-align: left;
     font-weight: bold;
     padding-left: 10px;
@@ -311,22 +361,25 @@ h1 {
     margin-left: 10px;
 }
   
-.delete-btn {
-    background-color: #0d6efd;
-    border: none;
-    border-radius: 10%;
+.btn.btn-danger.delete-btn {
     font-size: small;
     margin-right: 10px;
+    padding: 0px;
+    min-width: 22px;
     color: #fff;
+    background-color: #e4eaf4;
+    border: none;
+    border-radius: 20%;
 }
 
-.delete-btn:hover {
-    background-color: #e31b2b;
-    border: none;
-    border-radius: 10%;
-    font-size: small;
-    margin-right: 10px;
-    color: #fff;
+.btn.btn-danger.delete-btn:hover,
+.btn.btn-danger.delete-btn.active {
+    background-color: #dc3545;
+}
+
+.btn.btn-danger.delete-btn:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 .no-log {
