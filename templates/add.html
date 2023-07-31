@@ -14,10 +14,9 @@ Add Food
 
 <!-- test to get at alt_measures values from results_dict CAN NOT USE results var - that is for JS use -->
 {% if results_dict.alt_measures is not none %}
-{% for measure in results_dict.alt_measures %}
-<div>{{ measure.measure }}</div>
-<div>{{ measure.serving_weight }}</div>
-{% endfor %}
+    {% for alt in results_dict.alt_measures %}
+        <div>{{ alt.measure }}: {{ alt.serving_weight }}</div>
+    {% endfor %}
 {% endif %}
 
 
@@ -27,13 +26,12 @@ Add Food
 <h3 id="food_name"></h3>
 <div id="brand_name"></div>
 
-<p id="alt_measures"></p>
-
 <div class="label-container">
     <div class="label" id="nutritionLabel"></div>
 </div>
 
-<h5>Macros:</h5>
+<!-- add calories from fat, carbs, protein in a circle graph =thing -->
+<!-- <h5>Macros:</h5> -->
 
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" id="modal-trigger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -54,10 +52,11 @@ Add Food
                     <h3 id="food_name"></h3>
                     <div id="brand_name"></div>
                     
+                    <!-- database values from JS -->
                     <input type="hidden" name="food_name" value="{{ results_dict.food_name }}">
                     <input type="hidden" name="brand_name" value="{{ results_dict.brand_name }}">
-                    <input type="hidden" name="serving_unit" value="{{ results_dict.serving_unit }}">
-                    <input type="hidden" name="serving_weight_grams" value="{{ results_dict.serving_weight_grams }}">
+                    <input type="hidden" name="serving_unit" id="form_serving_unit">
+                    <input type="hidden" name="serving_weight_grams" id="form_serving_weight_grams">
                     <input type="hidden" name="nf_calories" id="form_calories">
                     <input type="hidden" name="nf_total_fat" id="form_total_fat">
                     <input type="hidden" name="nf_saturated_fat" id="form_saturated_fat">
@@ -72,13 +71,19 @@ Add Food
                     <div class="modal-content-wrapper">
                         <div class="modal-selector-container">
                             <input autofocus class="form-control add-food" type="number" value="1" step="0.1" min="0" max="9999" name="serving_qty" id="modal-serving-qty"></input>
-                            <select class="form-select add-food">
-                                <option disabled selected>Serving Unit</option>
-                                <option value="{{ results_dict.serving_unit }}">{{ results_dict.serving_unit }}</option>
-                                <option value="1">Hold1</option>
-                                <option value="2">Hold2</option>
-                                <option value="3">Hold3</option>
-                                <option value="4">Hold4</option>
+                            <select class="form-select add-food" id="modal-serving-unit">
+                                {% if results_dict.alt_measures is not none %}
+                                    {% for alt in results_dict.alt_measures %}
+                                        <!-- fix the "g" measure since it's serving_weight is 100g, it doesn't make sense -->
+                                        <!-- maybe just remove it from the list and add common measures after for loop -->
+                                        <!-- common measures: grams, ounces, pounds, cups, etc. -->
+                                        <option value="{{ loop.index0 }}">{{ alt.measure }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <!-- if no alt_measures, then display default serving unit -->
+                                    <!-- value here doesn't matter, JS will take care of it -->
+                                    <option value="{{ results_dict.serving_unit }}">{{ results_dict.serving_unit }}</option>
+                                {% endif %}
                             </select>
                         </div>
 
@@ -152,8 +157,8 @@ Add Food
                     <button type="button" class="btn btn-outline-primary btn-sm meal-type-btn" value="snack" >Snack</button>
 
                     <!-- database values from JS -->
-                    <input type="hidden" name="a1" id="a1">
                     <input type="hidden" name="meal_type" id="meal_type">
+                    <input type="hidden" name="a1" id="a1">
                     <input type="hidden" name="search_id" id="search_id">
                     <input type="hidden" name="thumb" id="thumb">
 

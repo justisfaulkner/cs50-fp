@@ -91,54 +91,31 @@ def add():
 @app.route("/submit", methods=["POST"])
 @login_required
 def submit():
-    # need to add serving unit and figure that whole thing out
 
     user_id = session["user_id"]
-    # print(f"user_id: ", user_id)
     date = dt.today().strftime("%Y-%m-%d")
-    # print(f"date: ", date)
     time = datetime.now().strftime("%H:%M:%S")
-    # print(f"time: ", time)
     meal_type = request.form.get("meal_type")
-    # print(f"meal_type: ", meal_type)
     a1 = request.form.get("a1")
-    # print(f"a1: ", a1)
     food_name = request.form.get("food_name")
-    # print(f"food_name: ", food_name)
     brand_name = request.form.get("brand_name")
-    # print(f"brand_name: ", brand_name)
     search_id = request.form.get("search_id")
-    # print(f"search_id: ", search_id)
     thumb = request.form.get("thumb")
-    # print(f"thumb: ", thumb)
     serving_qty = request.form.get("serving_qty")
-    # print(f"serving_qty: ", serving_qty)
-    # serving_unit =
-    # print(f"serving_unit: ", serving_unit)
+    serving_unit = request.form.get("serving_unit")
     serving_weight_grams = request.form.get("serving_weight_grams")
-    # print(f"serving_weight_grams: ", serving_weight_grams)
     nf_calories = request.form.get("nf_calories")
-    # print(f"nf_calories: ", nf_calories)
     nf_total_fat = request.form.get("nf_total_fat")
-    # print(f"nf_total_fat: ", nf_total_fat)
     nf_saturated_fat = request.form.get("nf_saturated_fat")
-    # print(f"nf_saturated_fat: ", nf_saturated_fat)
     nf_cholesterol = request.form.get("nf_cholesterol")
-    # print(f"nf_cholesterol: ", nf_cholesterol)
     nf_sodium = request.form.get("nf_sodium")
-    # print(f"nf_sodium: ", nf_sodium)
     nf_total_carbohydrate = request.form.get("nf_total_carbohydrate")
-    # print(f"nf_total_carbohydrate: ", nf_total_carbohydrate)
     nf_dietary_fiber = request.form.get("nf_dietary_fiber")
-    # print(f"nf_dietary_fiber: ", nf_dietary_fiber)
     nf_sugars = request.form.get("nf_sugars")
-    # print(f"nf_sugars: ", nf_sugars)
     nf_protein = request.form.get("nf_protein")
-    # print(f"nf_protein: ", nf_protein)
 
-    # need to add serving unit
     db.execute(
-        "INSERT INTO food (user_id, date, time, meal_type, a1, food_name, brand_name, search_id, thumb, serving_qty, serving_weight_grams, nf_calories, nf_total_fat, nf_saturated_fat, nf_cholesterol, nf_sodium, nf_total_carbohydrate, nf_dietary_fiber, nf_sugars, nf_protein) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO food (user_id, date, time, meal_type, a1, food_name, brand_name, search_id, thumb, serving_qty, serving_unit, serving_weight_grams, nf_calories, nf_total_fat, nf_saturated_fat, nf_cholesterol, nf_sodium, nf_total_carbohydrate, nf_dietary_fiber, nf_sugars, nf_protein) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         user_id,
         date,
         time,
@@ -149,6 +126,7 @@ def submit():
         search_id,
         thumb,
         serving_qty,
+        serving_unit,
         serving_weight_grams,
         nf_calories,
         nf_total_fat,

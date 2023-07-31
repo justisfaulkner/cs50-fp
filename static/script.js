@@ -145,7 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-    
         // Create a new MutationObserver
         const observer = new MutationObserver(handleCurrentDayChange);
 
@@ -220,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // function for deleting a food from log
+        // function for deleting a food item from log
         const finalDeletes = document.querySelectorAll('.btn.btn-danger.final-delete')
         finalDeletes.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -233,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 uniqueFoodItemContainer.setAttribute('data-vis', "deleted")
                 uniqueFoodItemContainer.style.display = 'none';
 
+                // event to click back a day and forward a day to force mutation function to fire
                 const changeDay = new Event('click', { bubbles: true});
                 prevDayBtn.dispatchEvent(changeDay)
                 nextDayBtn.dispatchEvent(changeDay)
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentDayBtn.dispatchEvent(CurrentDayBtnClickEvent)
     }
 
-    // function to disallow submission on search instant form (it autoupdates, submission would results in plaintext JSON)
+    // function to disallow submission on search instant form since it autoupdates (submission would results in plaintext JSON)
     searchForm.addEventListener("submit", function(event) {
         event.preventDefault();
     });
@@ -266,8 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
  
-
-    // function to implement search instant and autodisplay results
+    // functions to implement search instant and autodisplay results
     let timerId;
     searchInput.addEventListener('input', () => {
         clearTimeout(timerId)
@@ -344,13 +343,13 @@ document.addEventListener('DOMContentLoaded', () => {
           itemRightContent.appendChild(itemCals);
         });
       }
-      
     
     function clearResults() {
         resultsContainer.innerHTML = '';
         resultsWrapper.style.display = 'none';
     }
 
+    // function to hide search results if clicked outside search bar or search results
     function hideResultsWrapper(event) {
         const targetElement = event.target;
         
@@ -358,22 +357,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!resultsWrapper.contains(targetElement) && !searchForm.contains(targetElement)) {
           resultsWrapper.style.display = 'none'; // Hide the container
         }
-      }
+    }
       
+      // function to show search results if clicked back in search bar
       function showResultsWrapper() {
         if (resultsContainer.children.length > 0) {
             resultsWrapper.style.display = 'block'; // Show the container
         }
         
-      }
+    }
       
-      // Listen for click events on the window
-      window.addEventListener('mousedown', hideResultsWrapper);
-      window.addEventListener('mousedown', removeActiveFromLogDeleteBtns)
-      
-      // Listen for focus event on the search input
-      searchInput.addEventListener('focus', showResultsWrapper);
+    // listen for click events on the window to hide search results
+    window.addEventListener('mousedown', hideResultsWrapper);
+    // listen for click events on the window to remove active from delete food from log buttons
+    window.addEventListener('mousedown', removeActiveFromLogDeleteBtns);
+    // listen for click into search bar to show search results again
+    searchInput.addEventListener('focus', showResultsWrapper);
 
+    // listen for clicks on filter buttons to get what category they are for filtering
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
           const category = button.dataset.type;
@@ -381,6 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     })
 
+    // function to filter results based on which filter button was clicked
     function filter(category) {     
         const displayedItems = Array.from(resultsContainer.querySelectorAll('button'));  
         
@@ -395,6 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
           });
     }
 
+    // function to establish data to pass to python to run API then switch window to display result of food selected
     function addFood() {
         const nutrientButtons = Array.from(resultsContainer.querySelectorAll('button'));
         nutrientButtons.forEach(button => {
@@ -412,16 +415,20 @@ document.addEventListener('DOMContentLoaded', () => {
           })
         });
     }
-      
+    
+    // function to switch window after clicking a food
     function switchWindow(query, category) {
         const url = `/add?add-food=${query}&category=${category}`;
         window.location.assign(url);
     }
 
+    
     if (currentURL.includes("/add?add-food=")) {
+        // get results passed to add.html and parse them to be a JSON object
         const flaskResults = document.getElementById("APIresults").getAttribute("data-api-results")
         const jsResults = JSON.parse(flaskResults)
 
+        // set the appropriate html attributes for each key so the correct results appear on add.html
         const keys = Object.keys(jsResults);
         keys.forEach(key => {
             if (key === 'photo') {
@@ -429,13 +436,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 for (let i = 0; i < ids.length; i++) {
                     ids[i].src = jsResults[key];
                 }
-            }    
-            else if (key === 'alt_measures') {
+            } else if (key === 'alt_measures') {
                 const measuresKey = jsResults[key];
                 console.log(measuresKey)
                 // left off here
-            }
-            else {
+            } else {
                 const ids = document.querySelectorAll('#' + key);
                 for (let i = 0; i < ids.length; i++) {
                     ids[i].textContent = jsResults[key];
@@ -496,10 +501,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // jquery plugin to create an FDA-like nutrition label. 
         // options var holds the settings for the plugin so added sugars can be toggled
         $('#nutritionLabel').nutritionLabel(options);
-    }
     
-    const modalForm = document.getElementById('add-food-form')
+    
     // prevent user from hitting enter in the form
+    const modalForm = document.getElementById('add-food-form')
     modalForm.addEventListener('keydown', function(event) {
         if (event.key === 'Enter'){
             event.preventDefault();
@@ -516,10 +521,11 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
         }
     });
-
-    // add event listner to add-food button for modal popup and put 1 in for serving qty value so it formats correctly 
-    const modalTrigger = document.getElementById('modal-trigger')
+ 
+    const modalTrigger = document.getElementById('modal-trigger');
+    
     const modalInput = document.getElementById('modal-serving-qty');
+    const modalSelect = document.getElementById('modal-serving-unit');
 
     const modalCalories = document.getElementById('nf_calories');
     const modalTotalFat = document.getElementById('nf_total_fat');
@@ -541,45 +547,62 @@ document.addEventListener('DOMContentLoaded', () => {
     const nfSugars = parseFloat(modalSugars.textContent, 10);
     const nfProtein = parseFloat(modalProtein.textContent, 10);
 
+    // listen for modal to be triggered, so artificial input can be added to serving quantity so data formats correctly
     modalTrigger.addEventListener('click', function() {
+        
         const inputEvent = new Event('input', { bubbles: true});
         modalInput.dispatchEvent(inputEvent)
     })
     
     modalInput.addEventListener('input', updateModal);
+    modalSelect.addEventListener('change', updateModal);
 
 
     function updateModal() {
         const nfQty = parseFloat(modalInput.value, 10);
+        const selectIndex = parseInt(modalSelect.value, 10);
+        let weightGrams = null;
+        let servingUnit = null;
+        if (!isNaN(selectIndex)) {
+            weightGrams =  jsResults.alt_measures[selectIndex].serving_weight;
+            servingUnit = jsResults.alt_measures[selectIndex].measure;
+        } else {
+            weightGrams = jsResults.serving_weight_grams;
+            servingUnit = jsResults.serving_unit;
+        }
+        const inputMultiplier = weightGrams / jsResults.serving_weight_grams
 
         if (!isNaN(nfQty)) {
-            const Calories = nfCalories * nfQty;
-            const TotalFat = nfTotalFat * nfQty;
-            const SatFat = nfSatFat * nfQty;
-            const Cholesterol = nfCholesterol * nfQty;
-            const Sodium = nfSodium * nfQty;
-            const Carbs = nfCarbs * nfQty;
-            const Fiber = nfFiber * nfQty;
-            const Sugars = nfSugars * nfQty;
-            const Protein = nfProtein * nfQty;
+            const Calories = nfCalories * nfQty * inputMultiplier;
+            const TotalFat = nfTotalFat * nfQty * inputMultiplier;
+            const SatFat = nfSatFat * nfQty * inputMultiplier;
+            const Cholesterol = nfCholesterol * nfQty * inputMultiplier;
+            const Sodium = nfSodium * nfQty * inputMultiplier;
+            const Carbs = nfCarbs * nfQty * inputMultiplier;
+            const Fiber = nfFiber * nfQty * inputMultiplier;
+            const Sugars = nfSugars * nfQty * inputMultiplier;
+            const Protein = nfProtein * nfQty * inputMultiplier;
             modalCalories.textContent = Calories.toFixed(0);
-            document.getElementById('form_calories').value = Calories.toFixed(0);
+            document.getElementById('form_calories').value = Calories.toFixed(0); // for db
             modalTotalFat.textContent = TotalFat.toFixed(1) + 'g';
-            document.getElementById('form_total_fat').value = TotalFat.toFixed(1);
+            document.getElementById('form_total_fat').value = TotalFat.toFixed(1); // for db
             modalSatFat.textContent = SatFat.toFixed(1) + 'g';
-            document.getElementById('form_saturated_fat').value = SatFat.toFixed(1);
+            document.getElementById('form_saturated_fat').value = SatFat.toFixed(1); // for db
             modalCholesterol.textContent = Cholesterol.toFixed(0) + 'mg';
-            document.getElementById('form_cholesterol').value = Cholesterol.toFixed(0);
+            document.getElementById('form_cholesterol').value = Cholesterol.toFixed(0); // for db
             modalSodium.textContent = Sodium.toFixed(0) + 'mg';
-            document.getElementById('form_sodium').value = Sodium.toFixed(0);
+            document.getElementById('form_sodium').value = Sodium.toFixed(0); // for db
             modalCarbs.textContent = Carbs.toFixed(1) + 'g';
-            document.getElementById('form_total_carbohydrate').value = Carbs.toFixed(1);
+            document.getElementById('form_total_carbohydrate').value = Carbs.toFixed(1); // for db
             modalFiber.textContent = Fiber.toFixed(1) + 'g';
-            document.getElementById('form_dietary_fiber').value = Fiber.toFixed(1);
+            document.getElementById('form_dietary_fiber').value = Fiber.toFixed(1); // for db
             modalSugars.textContent = Sugars.toFixed(1) + 'g';
-            document.getElementById('form_sugars').value = Sugars.toFixed(1);
+            document.getElementById('form_sugars').value = Sugars.toFixed(1); // for db
             modalProtein.textContent = Protein.toFixed(1) + 'g';
-            document.getElementById('form_protein').value = Protein.toFixed(1);
+            document.getElementById('form_protein').value = Protein.toFixed(1); // for db
+
+            document.getElementById('form_serving_unit').value = servingUnit; // for db
+            document.getElementById('form_serving_weight_grams').value = weightGrams; // for db
         }
         else {
             modalCalories.textContent = "";
@@ -603,13 +626,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.remove('active');
             })
             button.classList.add('active');
-            document.getElementById('meal_type').value = button.value;
+            document.getElementById('meal_type').value = button.value; // for db
             // used to remove the meal-alert
             document.getElementById('meal-alert').style.display = 'none';
         });
     });
-    document.getElementById('a1').value = localStorage.getItem('a1');
-    document.getElementById('search_id').value = localStorage.getItem('search_id');
-    document.getElementById('thumb').value = localStorage.getItem('thumb');
+    document.getElementById('a1').value = localStorage.getItem('a1'); //for db
+    document.getElementById('search_id').value = localStorage.getItem('search_id'); //for db
+    document.getElementById('thumb').value = localStorage.getItem('thumb'); //for db
+
+    }
 
 });

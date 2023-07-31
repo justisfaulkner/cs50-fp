@@ -64,7 +64,7 @@ CREATE TABLE food (
 
 
 DB account:
-unique_id primary key
+account_id primary key
 user_id foreign key
 weight_goal (gain, lose, maintain)
 goal_per_week (0.5lbs, 1lbs, 1.5lbs 2lbs, etc)
