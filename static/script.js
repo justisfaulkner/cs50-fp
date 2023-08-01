@@ -327,12 +327,12 @@ document.addEventListener('DOMContentLoaded', () => {
       
           const itemFoodName = document.createElement('div');
           itemFoodName.setAttribute('class', 'item-food-name');
-          itemFoodName.textContent = result.food_name
+          itemFoodName.textContent = result.food_name;
           itemLeftContent.appendChild(itemFoodName);
       
           const itemBrandName = document.createElement('div');
           itemBrandName.setAttribute('class', 'item-brand-name');
-          itemBrandName.textContent = result.brand_name
+          itemBrandName.textContent = result.brand_name;
           itemLeftContent.appendChild(itemBrandName);
 
           const itemRightContent = document.createElement('div');
@@ -341,12 +341,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const itemCalories = document.createElement('div');
           itemCalories.setAttribute('class', 'item-calories');
-          itemCalories.textContent = result.calories
+          itemCalories.textContent = Math.floor(result.calories);
           itemRightContent.appendChild(itemCalories);
 
           const itemCals = document.createElement('div');
           itemCals.setAttribute('class', 'item-cals');
-          itemCals.textContent = "cals"
+          itemCals.textContent = "cals";
           itemRightContent.appendChild(itemCals);
         });
       }

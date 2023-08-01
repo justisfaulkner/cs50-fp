@@ -83,10 +83,11 @@ def add():
     else:
         ...
 
-
-# def log() to actually log the food to meal from modal and save it to database and display it.
-# saving to DB and displaying might be two dif functs. log() in add route and display() in index route
-
+@app.route("/account", methods=["GET", "POST"])
+@login_required
+def account():
+    if request.method == "GET":
+       return render_template("account.html")
 
 @app.route("/submit", methods=["POST"])
 @login_required

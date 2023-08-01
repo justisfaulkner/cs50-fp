@@ -12,14 +12,6 @@ Add Food
 <!-- set results so I can access in JS -->
 <div id="APIresults" data-api-results="{{ results }}"></div>
 
-<!-- test to get at alt_measures values from results_dict CAN NOT USE results var - that is for JS use -->
-{% if results_dict.alt_measures is not none %}
-    {% for alt in results_dict.alt_measures %}
-        <div>{{ alt.measure }}: {{ alt.serving_weight }}</div>
-    {% endfor %}
-{% endif %}
-
-
 
 <!-- have to use id names here then set the text, src, etc. in JS -->
 <img id="photo">
@@ -30,7 +22,7 @@ Add Food
     <div class="label" id="nutritionLabel"></div>
 </div>
 
-<!-- add calories from fat, carbs, protein in a circle graph =thing -->
+<!-- add calories from fat, carbs, protein in a circle graph thing -->
 <!-- <h5>Macros:</h5> -->
 
 <!-- Button trigger modal -->

@@ -10,7 +10,7 @@ h1 {
 .input-results-container {
     display: flex;
     justify-content: center;
-    width: 40%;
+    width: 30%;
     margin: 0 auto;
     position: relative;
 }
@@ -21,6 +21,12 @@ h1 {
     width: 100%;
 }
 
+.start-input-form {
+    justify-content: left;
+    align-items: center;
+    margin-bottom: -17px;
+}
+
 .results-wrapper {
     border-right: 1px solid #c2d5eb;
     border-left: 1px solid #c2d5eb;
@@ -29,7 +35,7 @@ h1 {
     display: none;
     /* display: block; -- on show (with JS) */
     position: absolute;
-    top: 110%;
+    top: 105%;
     left: 0;
     z-index: 1;
     min-width: 100%;
@@ -44,6 +50,8 @@ h1 {
     padding-left: 5px;
     background-color: #f2f2f2;
     border-radius: 5px;
+    /* padding-top: 10px; */
+    /* margin-top: -5px; */
 }
 
 .btn.btn-primary.filter-btn {
@@ -268,18 +276,31 @@ h1 {
     padding: 5px;
 }
 
-#meal-alert {
+#meal-alert,
+#account-alert {
     border: 1px solid #e31b2b;
     border-radius: 5px;
     color: #EA868F;
     background-color: #4e060c;
     align-items: center;
     justify-content: center;
+    text-align: center;
     width: 85%;
-    height: 30px;
+    height: max-content;
+    min-height: 30px;
     margin: 0 auto;
     margin-bottom: 10px;
     margin-top: -5px;
+}
+
+#account-current-macro-total {
+    /* display: flex; */
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    margin-top: -10px;
+
 }
 
 .tracker-wrapper {
@@ -434,4 +455,33 @@ h1 {
 .confirm-delete-food {
     color: #0d6efd;
     font-weight: bold;
+}
+
+.account-form-wrapper {
+    display: flex;
+    justify-content: center; /* Horizontally center the .tracker-container */
+    align-items: center; /* Vertically center the .tracker-container */
+  }
+
+.account-form-container {
+    flex-direction: row;
+    width: 380px;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+}
+
+/* .account-form {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+} */
+
+.input-group-text.macro {
+    width: 77px;
+    /* display: flex; */
+    align-items: center;
+    /* justify-content: center; */
 }
