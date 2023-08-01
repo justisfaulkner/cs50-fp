@@ -45,9 +45,14 @@ Home
                     {% if breakfast is not none %}
                         {% for food in breakfast %}
                         <div class="food-item-container" data-meal="{{ food.meal_type }}" data-vis="{{ food.date }}" data-cals="{{ food.nf_calories }}" data-id="{{ food.unique_id }}">
-                            <div class="food-item">{{ food.food_name }}</div>
-                            <div class="food-item">{{ food.serving_qty }} {{ food.serving_unit }}</div>
-                            <div class="food-item">{{ food.nf_calories }}</div>
+                            <div class="log-food-name">{{ food.food_name }}</div>
+                            <div class="serving-and-cals-container">
+                                <div class="serving-container">
+                                    <span class="log-serving-qty">{{ food.serving_qty }}</span> 
+                                    <span class="log-serving-unit">{{ food.serving_unit }}</span>
+                                </div>
+                                <div class="log-cals">{{ food.nf_calories }}</div>
+                            </div>
                             
                             <!-- Modal Trigger -->
                             <button type="button" class="btn btn-danger delete-btn" data-id="{{ food.unique_id }}" data-vis="{{ food.date }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ food.unique_id }}">✖</button>
@@ -85,10 +90,14 @@ Home
                     {% if lunch is not none %}
                         {% for food in lunch %}
                         <div class="food-item-container" data-meal="{{ food.meal_type }}" data-vis="{{ food.date }}" data-cals="{{ food.nf_calories }}" data-id="{{ food.unique_id }}">
-                            <div class="food-item">{{ food.food_name }}</div>
-                            <div class="food-item">{{ food.serving_qty }}</div>
-                            <div class="food-item">{{ food.serving_unit }}</div>
-                            <div class="food-item">{{ food.nf_calories }}</div>
+                            <div class="log-food-name">{{ food.food_name }}</div>
+                            <div class="serving-and-cals-container">
+                                <div class="serving-container">
+                                    <span class="log-serving-qty">{{ food.serving_qty }}</span> 
+                                    <span class="log-serving-unit">{{ food.serving_unit }}</span>
+                                </div>
+                                <div class="log-cals">{{ food.nf_calories }}</div>
+                            </div>
                             
                             <!-- Modal Trigger -->
                             <button type="button" class="btn btn-danger delete-btn" data-id="{{ food.unique_id }}" data-vis="{{ food.date }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ food.unique_id }}">✖</button>
@@ -126,10 +135,14 @@ Home
                     {% if dinner is not none %}
                         {% for food in dinner %}
                         <div class="food-item-container" data-meal="{{ food.meal_type }}" data-vis="{{ food.date }}" data-cals="{{ food.nf_calories }}" data-id="{{ food.unique_id }}">
-                            <div class="food-item">{{ food.food_name }}</div>
-                            <div class="food-item">{{ food.serving_qty }}</div>
-                            <div class="food-item">{{ food.serving_unit }}</div>
-                            <div class="food-item">{{ food.nf_calories }}</div>
+                            <div class="log-food-name">{{ food.food_name }}</div>
+                            <div class="serving-and-cals-container">
+                                <div class="serving-container">
+                                    <span class="log-serving-qty">{{ food.serving_qty }}</span> 
+                                    <span class="log-serving-unit">{{ food.serving_unit }}</span>
+                                </div>
+                                <div class="log-cals">{{ food.nf_calories }}</div>
+                            </div>
                             
                             <!-- Modal Trigger -->
                             <button type="button" class="btn btn-danger delete-btn" data-id="{{ food.unique_id }}" data-vis="{{ food.date }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ food.unique_id }}">✖</button>
@@ -167,10 +180,14 @@ Home
                     {% if snack is not none %}
                         {% for food in snack %}
                         <div class="food-item-container" data-meal="{{ food.meal_type }}" data-vis="{{ food.date }}" data-cals="{{ food.nf_calories }}" data-id="{{ food.unique_id }}">
-                            <div class="food-item">{{ food.food_name }}</div>
-                            <div class="food-item">{{ food.serving_qty }}</div>
-                            <div class="food-item">{{ food.serving_unit }}</div>
-                            <div class="food-item">{{ food.nf_calories }}</div>
+                            <div class="log-food-name">{{ food.food_name }}</div>
+                            <div class="serving-and-cals-container">
+                                <div class="serving-container">
+                                    <span class="log-serving-qty">{{ food.serving_qty }}</span> 
+                                    <span class="log-serving-unit">{{ food.serving_unit }}</span>
+                                </div>
+                                <div class="log-cals">{{ food.nf_calories }}</div>
+                            </div>
                             
                             <!-- Modal Trigger -->
                             <button type="button" class="btn btn-danger delete-btn" data-id="{{ food.unique_id }}" data-vis="{{ food.date }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ food.unique_id }}">✖</button>

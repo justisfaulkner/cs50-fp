@@ -141,9 +141,11 @@ h1 {
 
 .item-thumbnail img {
     display: block;
-    height: 25px;
+    max-height: 25px;
+    height: auto;
+    max-width: 25px;
     width: auto;
-}
+} 
 
 .item-content {
     display: flex;
@@ -357,14 +359,44 @@ h1 {
 
 .food-item-container {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     padding-top: 6px;
     position: relative;
 }
-  
-.food-item {
-    align-items: left;
-    margin-left: 10px;
+
+.log-food-name {
+    min-width: 385px; /* Expand to take most space */
+    max-width: 385px;
+    /* white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; */
+    text-align: left;
+    margin-left: 8px;
+}
+
+/* .log-food-name:hover {
+    overflow: auto;
+    content: initial;
+} */
+
+.serving-and-cals-container {
+    display: flex;
+    align-items: center; 
+}
+
+.serving-container {
+    min-width: 200px;
+    max-width: 200px;
+    /* white-space: nowrap;
+    overflow: auto; */
+    text-align: left;
+}
+
+.log-cals {
+    margin-left: 8px; /* Add spacing between elements */
+    margin-right: 8px;
+    text-align: left;
 }
   
 .btn.btn-danger.delete-btn {

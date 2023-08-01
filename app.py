@@ -104,7 +104,7 @@ def submit():
     serving_qty = request.form.get("serving_qty")
     serving_unit = request.form.get("serving_unit")
     serving_weight_grams = request.form.get("serving_weight_grams")
-    nf_calories = request.form.get("nf_calories")
+    nf_calories = int(request.form.get("nf_calories"))
     nf_total_fat = request.form.get("nf_total_fat")
     nf_saturated_fat = request.form.get("nf_saturated_fat")
     nf_cholesterol = request.form.get("nf_cholesterol")
