@@ -278,6 +278,7 @@ h1 {
 
 #meal-alert,
 #account-alert {
+    /* display: flex; -- on show (with JS) */
     border: 1px solid #e31b2b;
     border-radius: 5px;
     color: #EA868F;
@@ -291,16 +292,6 @@ h1 {
     margin: 0 auto;
     margin-bottom: 10px;
     margin-top: -5px;
-}
-
-#account-current-macro-total {
-    /* display: flex; */
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
-    margin-top: -10px;
-
 }
 
 .tracker-wrapper {
@@ -482,4 +473,14 @@ h1 {
     left: 120px;
     top: 50%;
     transform: translateY(-50%);
+}
+
+#account-current-macro-total {
+    /* display: flex; -- on show (with JS) */
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 10px;
 }

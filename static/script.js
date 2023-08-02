@@ -732,8 +732,6 @@ document.addEventListener('DOMContentLoaded', () => {
             target.addEventListener('input', function() {
                 // get the input value
                 let inputValue = target.value;
-                // when user changes a macro target percentage, update grams
-                updateGrams();
                 
                 // add a "%" sign after user input
                 const percentSigns = document.querySelectorAll('.percentage-sign')
@@ -767,10 +765,113 @@ document.addEventListener('DOMContentLoaded', () => {
                 const calorieBudget = document.getElementById('account-calorie-budget');
                 // when user changes their calorie budget, update grams
                 calorieBudget.addEventListener('input', updateGrams);
-            });
-        });
+                // when user changes a macro target percentage, update grams
+                updateGrams();
 
-        // make sure macro targets total to 100%
+
+                // make sure macro targets total to 100% before submitting
+                // setting variables in eventlistener so they will update with user input
+                // if user types in one, updates all goals and since there is no input yet it will be NaN
+                let fatGoalValue = parseInt(document.getElementById('account-fat-goal').value);
+                if (isNaN(fatGoalValue)) {
+                    fatGoalValue = 0;
+                } else {
+                    fatGoalValue = parseInt(document.getElementById('account-fat-goal').value);
+                }
+                let carbGoalValue = parseInt(document.getElementById('account-carb-goal').value);
+                if (isNaN(carbGoalValue)) {
+                    carbGoalValue = 0;
+                } else {
+                    carbGoalValue = parseInt(document.getElementById('account-carb-goal').value);
+                }
+                let proteinGoalValue = parseInt(document.getElementById('account-protein-goal').value);
+                if (isNaN(proteinGoalValue)) {
+                    proteinGoalValue = 0;
+                } else {
+                    proteinGoalValue = parseInt(document.getElementById('account-protein-goal').value);
+                }
+                const currentGoalValue = fatGoalValue + carbGoalValue + proteinGoalValue;
+                
+                // setting variables to display the "current macronutrients total: " div
+                const macroTotalDiv = document.getElementById('account-current-macro-total');
+                macroTotalDiv.textContent = "Current macronutrients total: " + currentGoalValue + "%";
+                // setting data-total attribute to the the total current goal value to be accessed in mutation observer for form validation
+                macroTotalDiv.setAttribute('data-total', currentGoalValue);
+
+                if (currentGoalValue === 100) {
+                    const macroAlert = document.getElementById('account-alert');
+                    macroAlert.style.display = 'none';
+                }
+
+            }); //end target.addEventListener('input'
+        }); // end macroTargets.forEach(target
+
+        
+        // make sure macro targets total to 100% before submitting
+        let valueMacroTotal = 0; // Initialize with the default value
+
+        function updateValueMacroTotal() {
+          const formMacroTotal = document.getElementById('account-current-macro-total');
+          valueMacroTotal = parseInt(formMacroTotal.getAttribute('data-total'));
+          console.log(valueMacroTotal, "valueMacroTotal");
+        }
+        
+        const formMacroTotal = document.getElementById('account-current-macro-total');
+        const observer = new MutationObserver(updateValueMacroTotal);
+        
+        // Configure and start the observer
+        const observerConfig = { childList: true, characterData: true, subtree: true };
+        observer.observe(formMacroTotal, observerConfig);
+        
+        // Define the validateAccount function in the global scope
+        window.validateAccount = function() {
+          updateValueMacroTotal(); // Update valueMacroTotal before validation
+          if (valueMacroTotal !== 100) {
+            console.log("Validation failed: Total must be 100%.");
+            const macroAlert = document.getElementById('account-alert');
+            macroAlert.style.display = 'flex';
+            return false;
+          }
+          console.log("Validation succeeded.");
+          return true;
+        };
+        
+
+
+        // // make sure macro targets total to 100% before submitting
+        // let fatGoalValue = parseInt(document.getElementById('account-fat-goal').value);
+        // if (isNaN(fatGoalValue)) {
+        //     fatGoalValue = 0;
+        // } else {
+        //     fatGoalValue = parseInt(document.getElementById('account-fat-goal').value);
+        // }
+
+        // let carbGoalValue = parseInt(document.getElementById('account-carb-goal').value);
+        // if (isNaN(carbGoalValue)) {
+        //     carbGoalValue = 0;
+        // } else {
+        //     carbGoalValue = parseInt(document.getElementById('account-carb-goal').value);
+        // }
+
+        // let proteinGoalValue = parseInt(document.getElementById('account-protein-goal').value);
+        // if (isNaN(proteinGoalValue)) {
+        //     proteinGoalValue = 0;
+        // } else {
+        //     proteinGoalValue = parseInt(document.getElementById('account-protein-goal').value);
+        // }
+
+        // const totalGoalValue = fatGoalValue + carbGoalValue + proteinGoalValue;
+        // console.log(totalGoalValue)
+        // const macroAlert = document.getElementById('account-alert');
+        // const accountDetailsForm = document.getElementById('account-details-form');
+
+        // accountDetailsForm.addEventListener('submit', function(event) {
+        //     if (totalGoalValue !== 100) {
+        //         console.log(totalGoalValue, "Form Submit Total Goal")
+        //         macroAlert.style.display = 'flex';
+        //         event.preventDefault();
+        //     }
+        // });
 
     } // end of if current page is account.html
 
