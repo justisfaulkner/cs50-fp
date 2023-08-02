@@ -86,8 +86,11 @@ def add():
 @app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
-    if request.method == "GET":
+    if request.method == "GET": # and db.execute has a value in it for the user, take to account-details.html else account.html to fill out form for first time
        return render_template("account.html")
+    elif request.method == "POST" and request.form.get('account-form') == "update-form":
+        # return redirect to a filled out version of account details, with an update button that takes back to account form
+        return redirect("/account")
 
 @app.route("/submit", methods=["POST"])
 @login_required

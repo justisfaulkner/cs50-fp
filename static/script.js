@@ -651,4 +651,99 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } // end of if current URL includes /add?add-food
 
+    if (currentPath === '/account.html' || currentPath === '/account') {
+        const accountWeightGoalSelect = document.getElementById('account-weight-goal')
+        
+        accountWeightGoalSelect.addEventListener('change', updateAccountGoalPerWeek_And_DisplayCalorieGoal)
+
+        function updateAccountGoalPerWeek_And_DisplayCalorieGoal () {
+            const weightGoal = document.getElementById('account-weight-goal').value;
+            const labelGoalPerWeek = document.getElementById('label-goal-per-week');
+            const accountGoalPerWeekSelect = document.getElementById('account-goal-per-week');
+            const optionGoalPerWeek = document.getElementById('option-goal-per-week');
+            const maintainOption = document.getElementById('maintain');
+            const gainLoseOptions = document.querySelectorAll('.gain-lose')
+
+            // check user selection for weight goal and populate weekly goal items appropriately
+            if (weightGoal === 'lose') {
+                labelGoalPerWeek.style.display = 'block';
+                accountGoalPerWeekSelect.style.display = 'block';
+                accountGoalPerWeekSelect.value = "";
+
+                optionGoalPerWeek.textContent = 'Lose';
+
+                maintainOption.style.display = 'none';
+                gainLoseOptions.forEach(option => {
+                    option.style.display = 'block';
+                });
+            } else if (weightGoal === 'gain') {
+                labelGoalPerWeek.style.display = 'block';
+                accountGoalPerWeekSelect.style.display = 'block';
+                accountGoalPerWeekSelect.value = "";
+
+                optionGoalPerWeek.textContent = 'Gain';
+
+                maintainOption.style.display = 'none';
+                gainLoseOptions.forEach(option => {
+                    option.style.display = 'block';
+                });
+            } else if (weightGoal === 'maintain') {
+                labelGoalPerWeek.style.display = 'block';
+                accountGoalPerWeekSelect.style.display = 'block';
+                accountGoalPerWeekSelect.value = "";
+
+                optionGoalPerWeek.textContent = 'Maintain';
+
+                maintainOption.style.display = 'block';
+                gainLoseOptions.forEach(option => {
+                    option.style.display = 'none';
+                });
+            }
+
+            // calc and display calorie budget
+            const accountBMR = document.getElementById('account-bmr');
+            const inputCalorieBudget = document.getElementById('account-calorie-budget');
+            const viewCalorieBudget = document.getElementById('view-account-budget');
+            
+            function updateView() {
+                const selectedWeeklyGoal = accountGoalPerWeekSelect.value;
+                const accountBMRValue = accountBMR.value;
+                let calorieBudget = 0;
+                if (weightGoal === "gain") {
+                    calorieBudget = (parseFloat(selectedWeeklyGoal) * 500) + parseInt(accountBMRValue);
+                } else {
+                    calorieBudget = (parseFloat(selectedWeeklyGoal) * -500) + parseInt(accountBMRValue);
+                }
+            
+                inputCalorieBudget.value = calorieBudget;
+                viewCalorieBudget.style.display = "block";
+            }
+            accountGoalPerWeekSelect.addEventListener('change', updateView);
+            accountBMR.addEventListener('input', updateView);
+            
+        }
+
+        // add a "%" sign after input & calc and display macro target grams
+        const macroTargets = document.querySelectorAll('.macro-target');
+
+        macroTargets.forEach(target => {
+            target.addEventListener('input', function() {
+                // Get the input value
+                let inputValue = target.value;
+                
+                const percentSigns = document.querySelectorAll(".percentage-sign")
+                percentSigns.forEach(percent => {
+                    // check if the current target input matches the percent element
+                    if (target === percent.previousElementSibling) {
+                        // display the percentage sign only if the target has a value
+                        percent.style.display = inputValue !== '' ? "flex" : "none";
+                    }
+                });
+            });
+        });
+
+        // make sure macro targets total to 100%
+
+    } // end of if current page is account.html
+
 });

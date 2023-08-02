@@ -471,17 +471,15 @@ h1 {
     text-align: left;
 }
 
-/* .account-form {
-    width: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: left;
-} */
-
 .input-group-text.macro {
     width: 77px;
-    /* display: flex; */
     align-items: center;
-    /* justify-content: center; */
+    position: relative;
+}
+
+.percentage-sign {
+    position: absolute;
+    left: 120px;
+    top: 50%;
+    transform: translateY(-50%);
 }
