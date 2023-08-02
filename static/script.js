@@ -654,9 +654,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentPath === '/account.html' || currentPath === '/account') {
         const accountWeightGoalSelect = document.getElementById('account-weight-goal')
         
-        accountWeightGoalSelect.addEventListener('change', updateAccountGoalPerWeek_And_DisplayCalorieGoal)
+        accountWeightGoalSelect.addEventListener('change', updateAccountGoalPerWeek_and_DisplayCalorieGoal)
 
-        function updateAccountGoalPerWeek_And_DisplayCalorieGoal () {
+        function updateAccountGoalPerWeek_and_DisplayCalorieGoal () {
             const weightGoal = document.getElementById('account-weight-goal').value;
             const labelGoalPerWeek = document.getElementById('label-goal-per-week');
             const accountGoalPerWeekSelect = document.getElementById('account-goal-per-week');
@@ -664,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const maintainOption = document.getElementById('maintain');
             const gainLoseOptions = document.querySelectorAll('.gain-lose')
 
-            // check user selection for weight goal and populate weekly goal items appropriately
+            // check user selection for weight goal and populate weekly goal options appropriately
             if (weightGoal === 'lose') {
                 labelGoalPerWeek.style.display = 'block';
                 accountGoalPerWeekSelect.style.display = 'block';
@@ -716,6 +716,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             
                 inputCalorieBudget.value = calorieBudget;
+                const inputEvent = new Event('input', {bubbles: true});
+                inputCalorieBudget.dispatchEvent(inputEvent);
                 viewCalorieBudget.style.display = "block";
             }
             accountGoalPerWeekSelect.addEventListener('change', updateView);
@@ -723,15 +725,18 @@ document.addEventListener('DOMContentLoaded', () => {
             
         }
 
-        // add a "%" sign after input & calc and display macro target grams
+        // add a "%" sign after input & calc and display macro target grams for each macro
         const macroTargets = document.querySelectorAll('.macro-target');
 
         macroTargets.forEach(target => {
             target.addEventListener('input', function() {
-                // Get the input value
+                // get the input value
                 let inputValue = target.value;
+                // when user changes a macro target percentage, update grams
+                updateGrams();
                 
-                const percentSigns = document.querySelectorAll(".percentage-sign")
+                // add a "%" sign after user input
+                const percentSigns = document.querySelectorAll('.percentage-sign')
                 percentSigns.forEach(percent => {
                     // check if the current target input matches the percent element
                     if (target === percent.previousElementSibling) {
@@ -739,6 +744,29 @@ document.addEventListener('DOMContentLoaded', () => {
                         percent.style.display = inputValue !== '' ? "flex" : "none";
                     }
                 });
+
+                // calc and display macro target grams
+                function updateGrams() {
+                    const targetGrams = document.querySelectorAll('.input-group-text.grams');
+                    targetGrams.forEach(gram => {
+                        const secondPrevSib = gram.previousElementSibling.previousElementSibling;
+                        const thirdPrevSib = secondPrevSib.previousElementSibling;
+                        if (target === secondPrevSib && inputValue !== '') {
+                            const inputValueInt = parseInt(inputValue);
+                            const calorieBudgetValue = document.getElementById('account-calorie-budget').value;
+                            if (thirdPrevSib.textContent === "Fat") {
+                                const gramDisplay = (calorieBudgetValue * (inputValueInt / 100)) / 9;
+                                gram.textContent = gramDisplay.toFixed(0) + 'g';
+                            } else {
+                                const gramDisplay = (calorieBudgetValue * (inputValueInt / 100)) / 4;
+                                gram.textContent = gramDisplay.toFixed(0) + 'g';
+                            }
+                        }
+                    });
+                }
+                const calorieBudget = document.getElementById('account-calorie-budget');
+                // when user changes their calorie budget, update grams
+                calorieBudget.addEventListener('input', updateGrams);
             });
         });
 
