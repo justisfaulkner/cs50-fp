@@ -164,6 +164,7 @@ h1 {
 
 .item-left-content {
     text-align: left;
+    margin-left: -20px;
 }
 
 .item-food-name {
@@ -177,6 +178,7 @@ h1 {
 .item-right-content {
     text-align: center;
     padding-right: 20px;
+    padding-left: 20px;
 }
 
 .item-calories {

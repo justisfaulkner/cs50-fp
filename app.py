@@ -9,13 +9,10 @@ from flask import (
     session,
     flash,
 )
-from flask_session import Session  # delete Session if not used
 import json
-import requests  # delete if not used
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from project import login_required, search_food, add_common_food, add_branded_food
-from secret import generate_secret_key
+from project import generate_secret_key, login_required, search_food, add_common_food, add_branded_food
 
 # figure out how I can wrap this with a main function or have a main function for other functions
 app = Flask(__name__)
@@ -23,36 +20,27 @@ app = Flask(__name__)
 key = generate_secret_key(32)
 app.secret_key = key
 
-# figure out what this jargon means and why I need a secret key instead of using this.
-# why was this used in the finance prob set?
-# if I don't use this bit of code -- remove import of flask_session -> Session
-# app.config["SESSION_PERMANENT"] = False
-# app.config["SESSION_TYPE"] = "filesystem"
-# Session(app)
-
 db = SQL("sqlite:///database.db")
-
 
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    # going to need to figure out how to get this on multiple pages and multiple areas on the page
-    # maybe I put it in project.py and make a function called app_seach or something
-    # then just call app_search
-    # can probably simplify this with GET and window.location.assign in JS like I did with def(add)
-    if (
-        request.method == "POST"
-    ):  # and request.headers.get('request_type') == "search_instant":
-        # not working right now -- showing as 'None' but weirdly showing before POST request in terminal
-        # actual POST request in network tab show's request_type = search_instant
-        # print(f"request_type: ", request.headers.get('Request_type'))
+    user_id = session["user_id"]
+    rows = db.execute("SELECT * FROM account WHERE user_id = ?", user_id)
+    if rows == []:
+        id = None
+    else:
+        id = rows[0]["user_id"]
+
+
+    if request.method == "POST":
         query = request.form.get("food-search")
         if query and len(query) >= 3:
             results = search_food(query)
             return jsonify(results)
         else:
             return jsonify([])
-    else:
+    elif request.method == "GET" and user_id == id:
         query = "SELECT * FROM food WHERE meal_type = ? AND user_id = ?"
         user_id = session["user_id"]
         
@@ -61,6 +49,8 @@ def index():
         dinner = db.execute(query, "dinner", user_id)
         snack = db.execute(query, "snack", user_id)
         return render_template("index.html", breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack)
+    else:
+        return redirect("/account")
 
 
 @app.route("/add", methods=["GET", "POST"])
@@ -86,11 +76,54 @@ def add():
 @app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
-    if request.method == "GET": # and db.execute has a value in it for the user, take to account-details.html else account.html to fill out form for first time
-       return render_template("account.html")
+    user_id = session["user_id"]
+    rows = db.execute("SELECT * FROM account WHERE user_id = ?", user_id)
+    if rows == []:
+        id = None
+    else:
+        id = rows[0]["user_id"]
+    
+    if request.method == "GET" and user_id == id: # if user trys to access account page and they have already entered account details, take them to account-details page to view their details
+       return redirect ("/account-details")
+    elif request.method == "GET" and user_id != id: # if user trys to access account page and they have not already entered account details, take them to account page to enter details
+        return render_template("account.html")
     elif request.method == "POST" and request.form.get('account-form') == "update-form":
         # return redirect to a filled out version of account details, with an update button that takes back to account form
-        return redirect("/account")
+        user_id = session["user_id"]
+        weight_goal = request.form.get("account-weight-goal")
+        goal_per_week = request.form.get("account-goal-per-week")
+        calorie_budget = request.form.get("account-calorie-budget")
+        protein_goal = request.form.get("account-protein-goal")
+        protein_goal = f".{protein_goal}" # make string a decimal representing percent
+        carb_goal = request.form.get("account-carb-goal")
+        carb_goal = f".{carb_goal}" # make string a decimal representing percent
+        fat_goal = request.form.get("account-fat-goal")
+        fat_goal = f".{fat_goal}" # make string a decimal representing percent
+        bmr = request.form.get("account-bmr")
+        weight = request.form.get("account-weight")
+
+        query = "INSERT INTO account (user_id, weight_goal, goal_per_week, calorie_budget, protein_goal, carb_goal, fat_goal, bmr, weight) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        db.execute(query, 
+            user_id, 
+            weight_goal, 
+            goal_per_week, 
+            calorie_budget, 
+            protein_goal, 
+            carb_goal, 
+            fat_goal, 
+            bmr, 
+            weight
+        )
+        return redirect("/account-details")
+
+
+@app.route("/account-details", methods=["GET"])
+@login_required
+def account_details():
+    user_id = session["user_id"]
+    account_details = db.execute("SELECT * FROM account WHERE user_id = ?", user_id)[0]
+    return render_template("account-details.html", account_details=account_details)
+
 
 @app.route("/submit", methods=["POST"])
 @login_required
@@ -150,7 +183,6 @@ def submit():
 def delete():
     user_id = session["user_id"]
     unique_id = request.form.get("unique_id")
-    # print(f"unique ID: ", unique_id)
     db.execute("DELETE FROM food WHERE user_id = ? AND unique_id = ?", user_id, unique_id)
     return redirect("/")
 
@@ -223,7 +255,7 @@ def register():
             flash("Must Provide a Username", "error")
             return render_template("register.html")
         elif username in usernames:
-            flash("Username already Exists", "error")
+            flash("Username Already Exists", "error")
             return render_template("register.html")
         elif not request.form.get("password"):
             flash("Must Provide a Password", "error")

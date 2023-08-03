@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Account Details
+{% endblock %}
+
+{% block main %}
+
+<h1>Account Details</h1>
+
+<p>
+    {% for key, value in account_details.items() %}
+        <div>{{ key }}: {{ value }}</div>
+    {% endfor %}
+</p>
+
+<div>TBD: add an update button so users can update information in DB</div>
+
+{% endblock %}

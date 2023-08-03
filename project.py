@@ -1,7 +1,9 @@
-from flask import redirect, request, session # delete request if not used
+import binascii
+from flask import redirect, session
 from functools import wraps
-import json # delete if not used
 import requests
+import os
+
 
 # set app and API keys
 app_id = "2a11e686"
@@ -14,6 +16,13 @@ def main():
         " to create a Web App that helps users track their calories."
         " See app.py for Flask Web App."
     )
+
+
+def generate_secret_key(length=32):
+    # Generate a random string of the specified length
+    random_bytes = os.urandom(length)
+    secret_key = binascii.hexlify(random_bytes).decode()
+    return secret_key
 
 
 def login_required(f):
@@ -60,7 +69,7 @@ def search_food(query):
                 results.append(
                     {
                         "a1": "common",
-                        "brand_name": "unbranded",
+                        "brand_name": "common food",
                         "calories": "",
                         "food_name": food_name, 
                         "search_id": search_id, 

@@ -341,12 +341,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const itemCalories = document.createElement('div');
           itemCalories.setAttribute('class', 'item-calories');
-          itemCalories.textContent = Math.floor(result.calories);
+          itemCalories.textContent = result.calories === "" ? "" : Math.floor(result.calories);
           itemRightContent.appendChild(itemCalories);
 
           const itemCals = document.createElement('div');
           itemCals.setAttribute('class', 'item-cals');
-          itemCals.textContent = "cals";
+          itemCals.textContent = result.calories === "" ? "" : "cals";
           itemRightContent.appendChild(itemCals);
         });
       }
@@ -811,68 +811,31 @@ document.addEventListener('DOMContentLoaded', () => {
         let valueMacroTotal = 0; // Initialize with the default value
 
         function updateValueMacroTotal() {
-          const formMacroTotal = document.getElementById('account-current-macro-total');
-          valueMacroTotal = parseInt(formMacroTotal.getAttribute('data-total'));
-          console.log(valueMacroTotal, "valueMacroTotal");
+            const currentMacroTotalDiv = document.getElementById('account-current-macro-total');
+            valueMacroTotal = parseInt(currentMacroTotalDiv.getAttribute('data-total'));
+            console.log(valueMacroTotal, "valueMacroTotal");
         }
         
-        const formMacroTotal = document.getElementById('account-current-macro-total');
+        const currentMacroTotalDiv = document.getElementById('account-current-macro-total');
         const observer = new MutationObserver(updateValueMacroTotal);
         
         // Configure and start the observer
         const observerConfig = { childList: true, characterData: true, subtree: true };
-        observer.observe(formMacroTotal, observerConfig);
+        observer.observe(currentMacroTotalDiv, observerConfig);
         
         // Define the validateAccount function in the global scope
         window.validateAccount = function() {
-          updateValueMacroTotal(); // Update valueMacroTotal before validation
-          if (valueMacroTotal !== 100) {
-            console.log("Validation failed: Total must be 100%.");
-            const macroAlert = document.getElementById('account-alert');
-            macroAlert.style.display = 'flex';
-            return false;
-          }
-          console.log("Validation succeeded.");
-          return true;
+            updateValueMacroTotal(); // Update valueMacroTotal before validation
+            if (valueMacroTotal !== 100) {
+                console.log("Validation failed: Total must be 100%.");
+                const macroAlert = document.getElementById('account-alert');
+                macroAlert.style.display = 'flex';
+                return false;
+            }
+            console.log("Validation succeeded.");
+            return true;
         };
         
-
-
-        // // make sure macro targets total to 100% before submitting
-        // let fatGoalValue = parseInt(document.getElementById('account-fat-goal').value);
-        // if (isNaN(fatGoalValue)) {
-        //     fatGoalValue = 0;
-        // } else {
-        //     fatGoalValue = parseInt(document.getElementById('account-fat-goal').value);
-        // }
-
-        // let carbGoalValue = parseInt(document.getElementById('account-carb-goal').value);
-        // if (isNaN(carbGoalValue)) {
-        //     carbGoalValue = 0;
-        // } else {
-        //     carbGoalValue = parseInt(document.getElementById('account-carb-goal').value);
-        // }
-
-        // let proteinGoalValue = parseInt(document.getElementById('account-protein-goal').value);
-        // if (isNaN(proteinGoalValue)) {
-        //     proteinGoalValue = 0;
-        // } else {
-        //     proteinGoalValue = parseInt(document.getElementById('account-protein-goal').value);
-        // }
-
-        // const totalGoalValue = fatGoalValue + carbGoalValue + proteinGoalValue;
-        // console.log(totalGoalValue)
-        // const macroAlert = document.getElementById('account-alert');
-        // const accountDetailsForm = document.getElementById('account-details-form');
-
-        // accountDetailsForm.addEventListener('submit', function(event) {
-        //     if (totalGoalValue !== 100) {
-        //         console.log(totalGoalValue, "Form Submit Total Goal")
-        //         macroAlert.style.display = 'flex';
-        //         event.preventDefault();
-        //     }
-        // });
-
     } // end of if current page is account.html
 
 });
