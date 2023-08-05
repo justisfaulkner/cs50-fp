@@ -12,30 +12,21 @@ Add Food
 <!-- set results so I can access in JS -->
 <div id="APIresults" data-api-results="{{ results }}"></div>
 
-<!-- test to get at alt_measures values from results_dict CAN NOT USE results var - that is for JS use -->
-{% if results_dict.alt_measures is not none %}
-{% for measure in results_dict.alt_measures %}
-<div>{{ measure.serving_weight }}</div>
-{% endfor %}
-{% endif %}
-
-
 
 <!-- have to use id names here then set the text, src, etc. in JS -->
 <img id="photo">
 <h3 id="food_name"></h3>
 <div id="brand_name"></div>
 
-<p id="alt_measures"></p>
-
 <div class="label-container">
     <div class="label" id="nutritionLabel"></div>
 </div>
 
-<h5>Macros:</h5>
+<!-- add calories from fat, carbs, protein in a circle graph thing -->
+<!-- <h5>Macros:</h5> -->
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+<button type="button" class="btn btn-primary" id="modal-trigger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     Add Food
 </button>
 
@@ -47,26 +38,128 @@ Add Food
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">JTrack & Logo</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <form id="add-food-form" method="post" action="/submit">
+                <div class="modal-body">
 
-                <h3 id="food_name"></h3>
-                <div id="brand_name"></div>
+                    <h3 id="food_name"></h3>
+                    <div id="brand_name"></div>
+                    
+                    <!-- database values from JS -->
+                    <input type="hidden" name="food_name" value="{{ results_dict.food_name }}">
+                    <input type="hidden" name="brand_name" value="{{ results_dict.brand_name }}">
+                    <input type="hidden" name="serving_unit" id="form_serving_unit">
+                    <input type="hidden" name="serving_weight_grams" id="form_serving_weight_grams">
+                    <input type="hidden" name="nf_calories" id="form_calories">
+                    <input type="hidden" name="nf_total_fat" id="form_total_fat">
+                    <input type="hidden" name="nf_saturated_fat" id="form_saturated_fat">
+                    <input type="hidden" name="nf_cholesterol" id="form_cholesterol">
+                    <input type="hidden" name="nf_sodium" id="form_sodium">
+                    <input type="hidden" name="nf_total_carbohydrate" id="form_total_carbohydrate">
+                    <input type="hidden" name="nf_dietary_fiber" id="form_dietary_fiber">
+                    <input type="hidden" name="nf_sugars" id="form_sugars">
+                    <input type="hidden" name="nf_protein" id="form_protein">
 
-                <hr>
+                    <hr>
+                    <div class="modal-content-wrapper">
+                        <div class="modal-selector-container">
+                            <input autofocus class="form-control add-food" type="number" value="1" step="0.1" min="0" max="9999" name="serving_qty" id="modal-serving-qty"></input>
+                            <select class="form-select add-food" id="modal-serving-unit">
+                                {% if results_dict.alt_measures is not none %}
+                                    {% for alt in results_dict.alt_measures %}
+                                        <!-- fix the "g" measure since it's serving_weight is 100g, it doesn't make sense -->
+                                        <!-- maybe just remove it from the list and add common measures after for loop -->
+                                        <!-- common measures: grams, ounces, pounds, cups, etc. -->
+                                        <option value="{{ loop.index0 }}">{{ alt.measure }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <!-- if no alt_measures, then display default serving unit -->
+                                    <!-- value here doesn't matter, JS will take care of it -->
+                                    <option value="{{ results_dict.serving_unit }}">{{ results_dict.serving_unit }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
 
-                <div class="label" id="nutritionLabel2"></div>
+                        <div class="modal-nutrition-container">
+                            <div id="modal-nutrition-1st">
+                                <div id="modal_calories">Calories</div>
+                                <div id="nf_calories">{{ results_dict.nf_calories }}</div>
+                            </div>
+                            <div class="vertical-line"></div>
+                            <div id="modal-nutrition-2nd">
+                                <div class="inline-items">
+                                    <div class="nutrient-pair">
+                                        <div class="nutrient-name" id="modal_total_fat">Total Fat</div>
+                                        <div class="nutrient-amount" id="nf_total_fat">{{ results_dict.nf_total_fat }}g</div>
+                                    </div>
+                                </div>
+                                <div class="sub-inline-items">
+                                    <div class="nutrient-pair">
+                                        <div class="nutrient-name" id="modal_saturated_fat">Sat. Fat</div>
+                                        <div class="nutrient-amount" id="nf_saturated_fat">{{ results_dict.nf_saturated_fat }}g</div>
+                                    </div>
+                                </div>
+                                <div class="sub-inline-items">
+                                    <div class="nutrient-pair">
+                                        <div class="nutrient-name" id="modal_cholesterol">Cholest.</div>
+                                        <div class="nutrient-amount" id="nf_cholesterol">{{ results_dict.nf_cholesterol }}mg</div>
+                                    </div>
+                                </div>
+                                <div class="inline-items">
+                                    <div class="nutrient-pair">
+                                        <div class="nutrient-name" id="modal_sodium">Sodium</div>
+                                        <div class="nutrient-amount" id="nf_sodium">{{ results_dict.nf_sodium }}mg</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="vertical-line"></div>
+                            <div id="modal-nutrition-3rd">
+                                <div class="inline-items">
+                                    <div class="nutrient-pair">
+                                        <div class="nutrient-name" id="modal_total_carbohydrate">Carbs.</div>
+                                        <div class="nutrient-amount" id="nf_total_carbohydrate">{{ results_dict.nf_total_carbohydrate }}g</div>
+                                    </div>
+                                </div>
+                                <div class="sub-inline-items">
+                                    <div class="nutrient-pair">
+                                        <div class="nutrient-name" id="modal_dietary_fiber">Fiber</div>
+                                        <div class="nutrient-amount" id="nf_dietary_fiber">{{ results_dict.nf_dietary_fiber }}g</div>
+                                    </div>
+                                </div>
+                                <div class="sub-inline-items">
+                                    <div class="nutrient-pair">
+                                        <div class="nutrient-name" id="modal_sugars">Sugars</div>
+                                        <div class="nutrient-amount" id="nf_sugars">{{ results_dict.nf_sugars }}g</div>
+                                    </div>
+                                </div>
+                                <div class="inline-items">
+                                    <div class="nutrient-pair">
+                                        <div class="nutrient-name" id="modal_protein">Protein</div>
+                                        <div class="nutrient-amount" id="nf_protein">{{ results_dict.nf_protein }}g</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                <hr>
+                    <hr>
+                    <div id="meal-alert" style="display: none;">Please select a meal</div>
+                    <button type="button" class="btn btn-outline-primary btn-sm meal-type-btn" value="breakfast" >Breakfast</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm meal-type-btn" value="lunch" >Lunch</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm meal-type-btn" value="dinner" >Dinner</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm meal-type-btn" value="snack" >Snack</button>
 
-                <button class="btn btn-outline-primary btn-sm">Breakfast</button>
-                <button class="btn btn-outline-primary btn-sm">Lunch</button>
-                <button class="btn btn-outline-primary btn-sm">Dinner</button>
-                <button class="btn btn-outline-primary btn-sm">Snack</button>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Add Food</button>
-            </div>
+                    <!-- database values from JS -->
+                    <input type="hidden" name="meal_type" id="meal_type">
+                    <input type="hidden" name="a1" id="a1">
+                    <input type="hidden" name="search_id" id="search_id">
+                    <input type="hidden" name="thumb" id="thumb">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Food</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

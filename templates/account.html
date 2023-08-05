@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Account
+{% endblock %}
+
+{% block main %}
+
+<div class="account-form-wrapper">
+    <div class="account-form-container">
+        <div class="account-form">
+            <form id="account-details-form" method="post" onsubmit="return validateAccount()" action="/account">
+                <legend>Account Details</legend>
+                <div class="mb-3">
+                    <label for="account-bmr" class="form-label">BMR</label>
+                    <input required type="number" class="form-control" id="account-bmr" name="account-bmr" placeholder="Basal Metabolic Rate">
+                </div>
+                <div class="mb-3">
+                    <label for="account-weight" class="form-label">Weight</label>
+                    <div class="input-group mb-3">
+                        <input required type="number" class="form-control" id="account-weight" name="account-weight" placeholder="Current Weight">
+                        <span class="input-group-text" id="account-weight-addon">lbs</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="account-weight-goal" class="form-label">Weight Goal</label>
+                    <select required class="form-select" id="account-weight-goal" name="account-weight-goal">
+                        <option disabled selected value="">Are you trying to...</option>
+                        <option value="maintain">Maintain weight</option>
+                        <option value="lose">Lose weight</option>
+                        <option value="gain">Gain weight</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <!-- hide this input until weight goal selection made -->
+                    <!-- if maintain is selected, keep hidden or show with 0 selected -->
+                    <label for="account-goal-per-week" class="form-label" id="label-goal-per-week" style="display: none;">Weekly</label>
+                    <select required class="form-select" id="account-goal-per-week" name="account-goal-per-week" style="display: none;">
+                        <!-- fill disabled selected text with Gain or Lose with JS based off weight goal selection -->
+                        <!-- fill each option with Gain 0.5lbs or Lose 0.5lbs... etc with JS based off weight gain selection -->
+                        <option disabled selected id="option-goal-per-week" value=""></option>
+                        <option id="maintain" value="0">0 lbs</option>
+                        <option class="gain-lose" value="0.5">0.5 lbs/week</option>
+                        <option class="gain-lose" value="1.0">1.0 lb/week</option>
+                        <option class="gain-lose" value="1.5">1.5 lbs/week</option>
+                        <option class="gain-lose" value="2">2.0 lbs/week</option>
+                    </select>
+                </div>
+                <div class="mb-3" id="view-account-budget" style="display: none;">
+                    <label for="account-budget" class="form-label">Daily Calorie Budget</label>
+                    <input class="form-control" id="account-calorie-budget" name="account-calorie-budget" type="text" value="0" aria-label="Calorie Budget" readonly>
+                    <div class="form-text">Calorie Budget = BMR + daily cals from weekly weight goal</div>
+                    <div class="form-text">For example, 1lb/week is a deficit or surplus of 500cals/day</div>
+                </div>
+                <div class="mb-3">
+                    <label for="account-fat-gaol" class="form-label">Macronutrient Targets</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text macro">Fat</span>
+                        <input required type="number" min="0" max="100" step="1" class="form-control macro-target" id="account-fat-goal" name="account-fat-goal" placeholder="as percentage of total calories">
+                        <span class="percentage-sign" style="display: none;">%</span>
+                        <span class="input-group-text grams">0g</span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text macro">Carbs</span>
+                        <input required type="number" min="0" max="100" step="1" class="form-control macro-target" id="account-carb-goal" name="account-carb-goal" placeholder="as percentage of total calories">
+                        <span class="percentage-sign" style="display: none;">%</span>
+                        <span class="input-group-text grams">0g</span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text macro">Protein</span>
+                        <input required type="number" min="0" max="100" step="1" class="form-control macro-target" id="account-protein-goal" name="account-protein-goal" placeholder="as percentage of total calories">
+                        <span class="percentage-sign" style="display: none;">%</span>
+                        <span class="input-group-text grams">0g</span>
+                    </div>
+                        <div id="account-current-macro-total" data-total="">Current macronutrients total:</div>
+                        <!-- keep hidden unless percentages don't total to 100% then don't let submit until they are -->
+                        <div id="account-alert" style="display: none;">Macro targets must total to 100%</div>
+                </div>
+
+                <input type="hidden" name="account-form" value="update-form">
+
+                <button type="submit" class="btn btn-primary" id="account-submit-btn">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

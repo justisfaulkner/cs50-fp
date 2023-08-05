@@ -1,0 +1,4 @@
+pip install Flask
+pip install requests
+pip install cs50
+pip install Werkzeug

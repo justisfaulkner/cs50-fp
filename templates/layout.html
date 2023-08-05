@@ -38,16 +38,14 @@
             <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbar">
-                {% if session["user_id"] %}
-                <ul class="navbar-nav me-auto mt-2">
-                    <li class="nav-item"><a class="nav-link" href="#">Log</a></li>
-                </ul>
-                <div class="input-results-container">
-                    <div class="input-results-wrapper">
+            {% if session["user_id"] %}
+            <div class="input-results-container">
+                <div class="input-results-wrapper">
+                    <div class="start-input-form">
                         <form id="search-form" method="post" action="/">
-                            <div>
-                                <input autocomplete="off" autofocus class="form-control input-form" type="text" id="food-search" name="food-search" placeholder="Search for a food">
+                            <div class="input-group mb-3">
+                                <input autocomplete="off" class="form-control input-form" type="text" id="food-search" name="food-search" placeholder="Add foods">
+                                <span class="input-group-text" id="search-addon">🔍</span>
                             </div>
                         </form>
                         <div class="results-wrapper" id="results-wrapper">
@@ -59,7 +57,9 @@
                             <div id="results-container"></div>
                         </div>
                     </div>
-                </div> 
+                </div>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav ms-auto mt-2">
                     <li class="nav-item"><a class="nav-link" href="/account">Account</a> </li>
                     <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>

@@ -1,7 +1,9 @@
-from flask import redirect, request, session
+import binascii
+from flask import redirect, session
 from functools import wraps
-import json
 import requests
+import os
+
 
 # set app and API keys
 app_id = "2a11e686"
@@ -14,6 +16,13 @@ def main():
         " to create a Web App that helps users track their calories."
         " See app.py for Flask Web App."
     )
+
+
+def generate_secret_key(length=32):
+    # Generate a random string of the specified length
+    random_bytes = os.urandom(length)
+    secret_key = binascii.hexlify(random_bytes).decode()
+    return secret_key
 
 
 def login_required(f):
@@ -33,7 +42,8 @@ def search_food(query):
     headers = {
         "x-app-id": app_id,
         "x-app-key": api_key,
-        # "x-user-jwt": "include if you want to have 'self' foods in the search/instant list of dicts"
+        "x-remote-user-id": "0",  # set to 0 during development
+        #"x-user-jwt": "0" include if you want to have 'self' foods in the search/instant list of dicts
         # "content-type": "application/json"
     }
 
@@ -59,7 +69,7 @@ def search_food(query):
                 results.append(
                     {
                         "a1": "common",
-                        "brand_name": "unbranded",
+                        "brand_name": "common food",
                         "calories": "",
                         "food_name": food_name, 
                         "search_id": search_id, 
@@ -83,7 +93,7 @@ def search_food(query):
                         "thumb": thumb
                     }
                 )
-        # can add self here down the line if I include the relevant header for the user
+        # can add self here down the line if I include the relevant header for the user (x-user-jtw)
         # elif hit == "self":
             # ...
 
